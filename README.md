@@ -49,3 +49,10 @@ _系统需求：只有满足所有这些要求时，Mac版Docker才会启动_
 
 _注意.如果你的系统是不满足这些要求的，你能安装Docker Toolbox,使用甲骨文的虚拟盒子来代替HyperKit_
 安装包括:Docker Engin, Docker CLi,Docker Compose和Docker Machine
+
+##### 1.5.Mac上安装和运行Docker
+* 双击`Docker.dmg`打开安装包，然后拖拽Moby蓝鲸到应用文件夹。在安装过程中你将会被Docker.app请求输入你电脑的系统密码。给予进入特权的需要安装网络组件和链接到Docker应用程序。
+* 双击Docker.app启动Docker，蓝鲸的头状态条表Docker正在运行，并且是可以从终端进入的。如果你已经安装了这个app，你也会获得暗示下一步成功的消息和链接到这个文档，点击蓝鲸图标在状态条上有下图这样一个显示和弹出
+* 点击鲸获取参数和其他选项
+* 选择关于Docker以验证您是否具有最新版本
+恭喜你，你已经完成Mac下面的Docker安装。
