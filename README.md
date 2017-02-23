@@ -20,6 +20,16 @@ _你的Mac本上是否已经安装了Docker,如果已经安装了Docker，你可
     {
                "experimental": true
     }
-
- 
+然后确认实验标志是可以使用的
+      
+    $ docker version -f '{{.Server.Experimental}}'
+    true
+###### 目前的实验特征
+额外的图形驱动插件
+Ipvlan网络驱动器
+Docker堆栈和分布式应用程序软件集
+检查点和恢复
+###### 怎么样评判这些特征
+此处的内容没什么用，主要是关于这些特征的更改建议。
+##### 2.2.Beta Docker下载
     
