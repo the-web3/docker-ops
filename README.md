@@ -134,7 +134,7 @@ nginx web服务器在你停止或者移除容器之前会持续运行着，如�
 选择，蓝鲸图标-->菜单条中的Preferences。你可以设置下面的运行时间选项
 ##### General
 ![f][f]
-[f]:https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/5.jpg "f"
+[f]:https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/6.jpg "f"
 
 ##### 自动启动，更新，备份，使用数据
 * Mac平台下的Docker设置当你登录的自动启动Docker。如果你想在开启你的对话时不启动Docker就不需要检查这个选项
