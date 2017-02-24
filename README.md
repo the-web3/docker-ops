@@ -161,7 +161,7 @@ nginx web服务器在你停止或者移除容器之前会持续运行着，如�
 * Storage location被重命名为Disk image location
 * Change location按钮被重命名为move disk image
 ![g][g]
-[g]:https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/7.png "g"
+[g]:https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/8.png "g"
 
 
 
