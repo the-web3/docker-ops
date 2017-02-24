@@ -141,13 +141,13 @@ nginx web服务器在你停止或者移除容器之前会持续运行着，如�
 * Mac平台下的Docker在更新可获得时，设置自动检查更新和告知用户，如果发现一个新版本，点击OK接受安装它(或者取消更新保存当前版本)。如果你不能够检查更新，你仍然可以手动地更新，蓝鲸-->Check for Update 
 * 选中从Time Machine备份中排除虚拟机以防止Time Machine备份Mac平台下的虚拟机
 * Send usage statistics你可以在Mac平台下设置Docker自动发送诊断、死机报告和用户数据。这些信息能帮助Docker提高应用程序和获取更多关于故障问题排除的内容。不检查这个opt输出和防止自动发送数据。在这些情况下Docker可能提供更多信息，甚至自动发送可用。
+
 ##### File sharing 
 ![f][f]
 [f]:https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/7.png "f"
 你能够用它来决定在你的Mac平台上的目录是否是容器共享
 * Add a Directory-点击`+`和操纵你想要添加的目录
-* 点击Apply & Restart使目录使用Docker的捆绑峰[-v]特征对当前容器有效。所有这些局限性在目录上是能够共享的
-它们不能成为已经共享的目录的子目录
+* 点击Apply & Restart使目录使用Docker的捆绑峰[-v]特征对当前容器有效。所有这些局限性在目录上是能够共享的它们不能成为已经共享的目录的子目录
 
 
 
