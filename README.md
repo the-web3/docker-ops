@@ -97,5 +97,7 @@ _注意.这上面只是一个例子，你的输出结果根据你的版本不同
 * 使用更刺激的方法，运行一个Docker化的web服务器，当然这样做的前提条件是你本地必须有你要运行的镜像。
   
       docker run -d -p 80:80 --name webserver nginx
+![c][c]
+[c]:https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/5.jpg "c"
 
 _如果本地没有找到这个镜像，那么Docker将会去Docker Hub中拉取镜像。_
