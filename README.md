@@ -1,9 +1,8 @@
 # 轻松玩转docker
 ## 第一章：Docker简介
 
-## 第二章：不同的平台上安装Docker
-
-### 第一节:Docker引擎的安装
+## 第二章：不同的平台上安装Docker与使用
+### 第一节:Mac平台上Docker安装与使用
  Docker是一个跨平台的轻量级虚拟机，可移植性非常高，一次部署，终生可用。Docker可以在Linux,Windows,MacOS等平台上安装使用。我们都知道Linux有很多不同        的版本，例如Ubuntu，AIX，CentOS，Debian，Fedora，Oracle Linux，Red Hat Enterprise Linux，openSUSE and SUSE Linux Enterprise等。尽管Linux的版本很多，但是我们的Docker都可以在他们在面运行。你也可以使用Docker云来自动准备和管理你的云实例。
 #### 1.在Mac系统上安转Docker
 Docker的Mac系统上的安装包中包含了你在Mac上运行Docker的所有依赖的东西，下面这个主题是描述在Mac系统上预安装需要考虑的一些问题和怎样在Mac系统上安装  Docker。
@@ -70,3 +69,10 @@ _注意.如果你的系统是不满足这些要求的，你能安装Docker Toolb
 * 选择关于Docker以验证您是否具有最新版本
 
 #### 恭喜你，你已经完成Mac下面的Docker安装。
+
+#### 2.Mac平台下Docker相关的东西
+#### 2.1.开始使用Docker for Mac
+Docker是一个创建集装箱式的全开发平台应用程序，在Mac平台上运行Docker最好的方法就是在Mac平台上启动Docker
+ 
+_注意:如果你还没有在Mac平台上安装Docker，请你现在Mac平台上安全稳定版的Docker或者Beta版本的Docker，在安装之前你必须了解Docker
+对Mac系统的安装需求，你可以先看上面提道的安装前你需要知道的东西。_
