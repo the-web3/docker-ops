@@ -88,4 +88,4 @@ _注意:如果你还没有在Mac平台上安装Docker，请你现在Mac平台上
 
     $ docker-machine --version
     docker-machine version 0.9.0, build 15fd4c7
-
+_注意.这上面只是一个例子，你的输出结果根据你的版本不同而不同_ 
