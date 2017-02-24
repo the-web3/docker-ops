@@ -164,9 +164,9 @@ nginx web服务器在你停止或者移除容器之前会持续运行着，如�
 [g]:https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/8.png "g"
 
 ##### HTTP 代理设置
-在Mac平台上的Docker将探测HTTP/HTTPS代理设置和自动地将这些设置传播到Docker和传播到你的容器。例如，如果你把的代理设置设置成http://proxy.example.com,当拉容器的时候，Docker将使用这个代理设置。
+在Mac平台上的Docker将探测HTTP/HTTPS代理设置和自动地将这些设置传播到Docker和传播到你的容器。例如，如果你把的代理设置设置成`http://proxy.example.com`,当拉容器的时候，Docker将使用这个代理设置。
 ![h][h]
-[h]:https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/8.png "h"
+[h]:https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/9.png "h"
 
 
 
