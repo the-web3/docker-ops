@@ -168,6 +168,17 @@ nginx web服务器在你停止或者移除容器之前会持续运行着，如�
 ![h][h]
 [h]:https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/9.png "h"
 
+#####  Docker Daemon
+你可以通过在Docker守护进程配置项中设置怎么样运行容器。你可以在守护进程中配置一些交互式设置或者转换到Advanced直接编辑JSON。基本对话框提供的设置也可以直接在JSON中配置，此版本只是介绍一些常见的设置，使其更容易配置它们。
+
+* 实验模式
+* 自定义注册
+* 编辑守护配置文件
+![h][h]
+[h]:https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/10.png "h"
+
+下面将会详细介绍着三种模式
+
 
 
 
