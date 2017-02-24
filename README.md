@@ -55,19 +55,18 @@ _注意.如果你的系统是不满足这些要求的，你能安装Docker Toolb
 ![a][a]
 [a]:https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/1.jpg "a"
 
-* 双击Docker.app启动Docker，蓝鲸的头状态条表Docker正在运行，并且是可以从终端进入的。如果你已经安装了这个app，你也会获得暗示下一步成功的消息和链接到这个文档，点击蓝鲸图标在状态条上有下图这样一个显示和弹出
-
+* 双击Docker.app启动Docker
 ![d][b]
 [b]:https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/2.jpg "d"
 
+* 蓝鲸的头状态条表Docker正在运行，并且是可以从终端进入的。如果你已经安装了这个app，你也会获得暗示下一步成功的消息和链接到这个文档，点击蓝鲸图标在状态条上有下图这样一个显示和弹出
 ![b][c]
 [c]:https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/3.jpg "b"
 
 * 点击鲸获取参数和其他选项
-
 ![c][d]
 [d]:https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/4.jpg "c"
 
 * 选择关于Docker以验证您是否具有最新版本
 
-恭喜你，你已经完成Mac下面的Docker安装。
+#### 恭喜你，你已经完成Mac下面的Docker安装。
