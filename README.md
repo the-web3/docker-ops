@@ -64,7 +64,6 @@ _注意.如果你的系统是不满足这些要求的，你能安装Docker Toolb
 [b]:https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/3.jpg "b"
 
 * 点击鲸获取参数和其他选项
-
 ![c][c]
 [c]:https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/4.jpg "c"
 
