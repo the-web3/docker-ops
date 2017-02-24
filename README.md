@@ -89,3 +89,11 @@ _注意:如果你还没有在Mac平台上安装Docker，请你现在Mac平台上
     $ docker-machine --version
     docker-machine version 0.9.0, build 15fd4c7
 _注意.这上面只是一个例子，你的输出结果根据你的版本不同而不同_ 
+
+#### 2.2. 浏览应用程序和运行一个案列
+* 打开命令行终端，使用Docker命令检查Docker是不像所期望的那样正常工作。可以使用这些命令docker version, docker ps和docker run hello-world来确认Docker是否正常运行，如果这些命令能正常执行,那么就说Docker在运行着。
+* 使用更刺激的方法，运行一个Docker化的web服务器，当然这样做的前提条件是你本地必须有你要运行的镜像。
+  
+      docker run -d -p 80:80 --name webserver nginx
+
+_如果本地没有找到这个镜像，那么Docker将会去Docker Hub中拉取镜像。_
