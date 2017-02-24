@@ -102,3 +102,6 @@ _注意.这上面只是一个例子，你的输出结果根据你的版本不同
 [c]:https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/5.jpg "c"
 
 _如果本地没有找到这个镜像，那么Docker将会去Docker Hub中拉取镜像。_
+_注意:早期的Beta发布版本使用docker做为主机名来创建URL，现在端口号被暴露在虚拟机的私有IP地址并且在没有主机名字设置的情况下传递给主机，也可以看Beta9的发布注意点。_
+
+*
