@@ -109,17 +109,12 @@ _注意:早期的Beta发布版本使用docker做为主机名来创建URL，现�
 nginx web服务器在你停止或者移除容器之前会持续运行着，如果你想停止web服务器:`docker stop webserver`,启动服务器用命令`docker start webserver`。查看一个容器是否停止了用命令`docker ps`; `docker ps -a`查看终止状态的容器。使用`docker rm -f webserver`命令来移除正在运行的容器。这个命令会移除容器，但不能移除`nginx`镜像。你可以使用docker list命令来列出本地镜像。你可能会保存一些镜像在本地以致于你不用再次去Docker Hub中拉镜像。想要移除一个长期不需要的镜像，使用docker rmi后加ID号和镜像名字。例如，docker rmi ngix。
 
 * 命令总结:
+
 `docker ps` 查看正在运行的容器
-
 `docker stop`停止正在运行的容器
-
 `docker start`启动容器
-
 `docker ps -a`查看终止状态的容器
-
 `docker rm -f webserver`命令来移除正在运行的容器
-
 `docker list` 列出本地镜像
-
 `docker rmi` 删除的镜像
 
