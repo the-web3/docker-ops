@@ -76,3 +76,16 @@ Docker是一个创建集装箱式的全开发平台应用程序，在Mac平台�
  
 _注意:如果你还没有在Mac平台上安装Docker，请你现在Mac平台上安全稳定版的Docker或者Beta版本的Docker，在安装之前你必须了解Docker
 对Mac系统的安装需求，你可以先看上面提道的安装前你需要知道的东西。_
+
+#### 2.2.检查Docker Engine，Docker Compose和Docker Machine的版本
+如果你的docker，docker-compose和docker-machine是能与Docker.app兼容的最新版本，那么你就可以运行下面这些命令
+    
+    $ docker --version
+    Docker version 1.13.0, build 49bf474
+
+    $ docker-compose --version
+    docker-compose version 1.10.0, build 4bd6f1a
+
+    $ docker-machine --version
+    docker-machine version 0.9.0, build 15fd4c7
+
