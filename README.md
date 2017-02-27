@@ -171,8 +171,8 @@ nginx web服务器在你停止或者移除容器之前会持续运行着，如�
 #####  Docker Daemon
 你可以通过在Docker守护进程配置项中设置怎么样运行容器。你可以在守护进程中配置一些交互式设置或者转换到Advanced直接编辑JSON。基本对话框提供的设置也可以直接在JSON中配置，此版本只是介绍一些常见的设置，使其更容易配置它们。
 
-![h][h]
-[h]:https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/10.png "h"
+![i][i]
+[i]:https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/10.png "i"
 
 * 实验模式
 * 自定义注册
@@ -205,6 +205,10 @@ nginx web服务器在你停止或者移除容器之前会持续运行着，如�
 ##### Custom registries
 一种可选的方案使用Docker Hub或Docker Trusted Registry来存储你的公有或者私有镜像，你能使用Docker来设置你的非安全注册，对你本机上的镜像添加URLs来实现非安全注册或者注册镜像。（也可以看FAQs，我怎么添加自定义的CA证书[此处本文后面会写]）
 
+##### 编辑daemon配置文件
+在Daemon-->Advanced dialog，你可以通过json文件直接配置Daemon，完全地决定你的容器怎么运行。想看Docker Daemon的完整条目，请看Daemon相关的Docker引擎命令行关联。在编辑完Daemon配置后，点击Apply & Restart来保存它并且重新启动Docker。或者，取消改变，点击tab键，当弹出对话框来询问时选择丢弃或者不应用。
+![j][j]
+[j]:https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/11.png "j"
 
 
 
