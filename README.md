@@ -210,6 +210,20 @@ nginx web服务器在你停止或者移除容器之前会持续运行着，如�
 ![j][j]
 [j]:https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/11.png "j"
 
+##### 卸载或者重置
+选择 小蓝鲸 ->从菜单条目上选择Preferences，然后在相关对话框上点击Uninstall / Reset。
+
+Uninstall--选择卸载选项是从你的Mac系统中移出DockerReset to factory defaults--选择这个选项重置Mac平台上的Docker使其回到初始状态，就像刚安装的时候一样。你可以通过`<DockerforMacPath> --uninstall`这个命令行来从Mac平台上卸载你的Docker。如果Docker默认安装在本地，下面的命令将提供清除卸载
+
+    $ /Applications/Docker.app/Contents/MacOS/Docker --uninstall
+    Docker is running, exiting...
+    Docker uninstalled successfully. You can move the Docker application to the trash.
+
+你可能想通过使用命令行来卸载Docker，例如，你发现一个没有功能的APP，你从菜单条目里面无法删除它，那么你就的使用命令行。
+
+
+
+
 
 
 
