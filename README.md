@@ -202,6 +202,8 @@ nginx web服务器在你停止或者移除容器之前会持续运行着，如�
      OS/Arch:      linux/amd64
      Experimental: true
 
+##### Custom registries
+一种可选的方案使用Docker Hub或Docker Trusted Registry来存储你的公有或者私有镜像，你能使用Docker来设置你的非安全注册，对你本机上的镜像添加URLs来实现非安全注册或者注册镜像。（也可以看FAQs，我怎么添加自定义的CA证书[此处本文后面会写]）
 
 
 
