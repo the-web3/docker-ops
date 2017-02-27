@@ -180,6 +180,27 @@ nginx web服务器在你停止或者移除容器之前会持续运行着，如�
 
 下面将会详细介绍着三种模式
 
+#####  Experimental mode
+
+在Mac平台上启动的Stable1.13.0和Beta31版本的Docker，这两种发布版本在Docker引擎上都有各自的实验特征。这部分内容在github上的Docker实验特征的的ReadMe中有介绍。实验特征是不适合于生产环境或者工作负载的。它们意味着对新想法的沙盒实验，许多实验特征可能会合并到即将发布的stable版本中，但是其他的从随后的Beta版本中可能的修饰和提高绝不会发布在Stable版本中。在Beta和Stable发布的版本中，你可打开或者关闭实验模式。不管你打开还是关闭它，Mac平台上的Docker会使用目前Docker引擎中常用的使用模式。不管你是不是以实验模式运行，你都可以通过`docker version`这个命令来检查Docker的版本。实验模式的数据将在`Server`下列出。如果`Experimental`是`true`，那么Docker将以实验模式运行，结果显示在下面。（如果false，Experiment模式是关闭）。
+
+    $ docker version
+    Client:
+     Version:      1.13.0-rc3
+     API version:  1.25
+     Go version:   go1.7.3
+     Git commit:   4d92237
+     Built:        Tue Dec  6 01:15:44 2016
+     OS/Arch:      darwin/amd64
+
+    Server:
+     Version:      1.13.0-rc3
+     API version:  1.25 (minimum version 1.12)
+     Go version:   go1.7.3
+     Git commit:   4d92237
+     Built:        Tue Dec  6 01:15:44 2016
+     OS/Arch:      linux/amd64
+     Experimental: true
 
 
 
