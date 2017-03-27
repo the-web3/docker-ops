@@ -139,6 +139,7 @@ nginx web服务器在你停止或者移除容器之前会持续运行着，如�
 
 图片7： 
     ![图片7](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/7.jpg  "图片7")
+    
 你能够用它来决定在你的Mac平台上的目录是否是容器共享
 * Add a Directory-点击`+`和操纵你想要添加的目录
 * 点击Apply & Restart使目录使用Docker的捆绑峰[-v]特征对当前容器有效。所有这些局限性在目录上是能够共享的它们不能成为已经共享的目录的子目录
@@ -153,11 +154,13 @@ nginx web服务器在你停止或者移除容器之前会持续运行着，如�
 
 * Storage location被重命名为Disk image location
 * Change location按钮被重命名为move disk image
+
 图片8： 
     ![图片8](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/8.jpg  "图片8")
 
 ##### HTTP 代理设置
 在Mac平台上的Docker将探测HTTP/HTTPS代理设置和自动地将这些设置传播到Docker和传播到你的容器。例如，如果你把的代理设置设置成`http://proxy.example.com`,当拉容器的时候，Docker将使用这个代理设置。
+
 图片9： 
     ![图片9](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/9.jpg  "图片9")
 
@@ -200,6 +203,7 @@ nginx web服务器在你停止或者移除容器之前会持续运行着，如�
 
 ##### 编辑daemon配置文件
 在Daemon-->Advanced dialog，你可以通过json文件直接配置Daemon，完全地决定你的容器怎么运行。想看Docker Daemon的完整条目，请看Daemon相关的Docker引擎命令行关联。在编辑完Daemon配置后，点击Apply & Restart来保存它并且重新启动Docker。或者，取消改变，点击tab键，当弹出对话框来询问时选择丢弃或者不应用。
+
 图片11： 
     ![图片11](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/11.jpg  "图片11")
 
@@ -241,12 +245,14 @@ Windows平台上的docker的安装包含docker在Windows平台上运行的所有
 
 ##### 2.1.stable通道下载
 下载地址为：`https://docs.docker.com/docker-for-windows/install/#download-docker-for-windows`
+
 图片15： 
     ![图片15](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/15.jpg  "图片15")
 
 
 ##### 2.2.edge通道下载
 下载地址为：`https://docs.docker.com/docker-for-windows/install/#download-docker-for-windows`
+
 图片151： 
     ![图片151](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/15.jpg  "图片151")
 
@@ -275,10 +281,12 @@ windows下的docker要求windows的系统是win10的企业版、教育版和微�
 4.2.接下来安装向导程序接受指令，接受安装、接下来继续安装
 
 4.3.设置`launch docker`然后完成安装
+
 图片16： 
     ![图片16](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/16.jpg  "图片16")
 
 ##### 5.在windows下启动docker
 当你安装完成后，docker会自动启动，蓝鲸状态条表面docker正在运行，而且你可以经过终端进入docker。如果你已经安装了运用程序，将会弹出一个成功的进度条然后建议你进行下一步，并且会连接到下面这个文档。当我们初始化完成之后，选择“about docker”点击进去可以看到docker的版本。到此为止，恭喜您，你已经完成在windows启动和运行docker。
+
 图片17： 
     ![图片17](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/17.jpg  "图片17")
