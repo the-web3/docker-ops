@@ -247,3 +247,8 @@ Windows平台上的docker的安装包含docker在Windows平台上运行的所有
 ##### 2.2.edge通道下载
 下载地址为：`https://docs.docker.com/docker-for-windows/install/#download-docker-for-windows`
 
+##### 注意：
+windows下的docker要求windows的系统是win10的企业版、教育版和微软虚拟化技术版本的。请您仔细看看你在安装需要了解的所有先决条件清单。虽然你可以选择安装stable通道或者edge通道中的docker，但是在同一个时间段你不能同时安装两个通道中的docker，在你安装另一个版本的docker和卸载这个版本的docker前，你需要保存保存镜像和导出容器。
+
+##### 3、在windows下安装docker前你需要知道的前提条件
+在windows下运行docker要求的前提条件是微软的虚拟化技术，在微软的虚拟化技术使用的情况下，如果虚拟盒子不能正常工作，但是会有一些虚拟盒子的vm镜像会被保留，通过虚拟盒子创建的`docker-machine`将不再启动。windows下的docker的这些VMs不能并行。即使这样，你也可以使用`docker-machine`来管理这些路由VMs。
