@@ -53,8 +53,8 @@ _注意.如果你的系统是不满足这些要求的，你能安装Docker Toolb
 
 ##### 1.5.Mac上安装和运行Docker
 * 双击`Docker.dmg`打开安装包，然后拖拽Moby蓝鲸到应用文件夹。在安装过程中你将会被Docker.app请求输入你电脑的系统密码。给予进入特权的需要安装网络组件和链接到Docker应用程序。
-![a][a]
-[a]:https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/1.jpg "a"
+图片1： 
+    ![图片1](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/1.jpg  "图片1")
 
 * 双击Docker.app启动Docker
 ![d][d]
