@@ -282,11 +282,10 @@ windows下的docker要求windows的系统是win10的企业版、教育版和微�
 
 4.3.设置`launch docker`然后完成安装
 
-图片16： 
+图片16:
     ![图片16](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/16.png  "图片16")
 
 ##### 5.在windows下启动docker
 当你安装完成后，docker会自动启动，蓝鲸状态条表面docker正在运行，而且你可以经过终端进入docker。如果你已经安装了运用程序，将会弹出一个成功的进度条然后建议你进行下一步，并且会连接到下面这个文档。当我们初始化完成之后，选择“about docker”点击进去可以看到docker的版本。到此为止，恭喜您，你已经完成在windows启动和运行docker。
 
-图片17： 
     ![图片17](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/17.png  "图片17")
