@@ -275,6 +275,7 @@ windows下的docker要求windows的系统是win10的企业版、教育版和微�
 4.2.接下来安装向导程序接受指令，接受安装、接下来继续安装
 
 4.3.设置`launch docker`然后完成安装
+
 图片16:
     ![图片16](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/16.png  "图片16")
 
