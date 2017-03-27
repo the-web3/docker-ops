@@ -264,3 +264,14 @@ windows下的docker要求windows的系统是win10的企业版、教育版和微�
 3.6、嵌入虚拟脚本，在VMware中运行一个windows平台下的docker或者一个平行实例，也许能正常工作，但是没有保证。
 
 3.7、windows下安装docker包含哪些东西：安装提供的docker Engine、docker客户的、docker compose项目和Docker Machine.
+
+##### 4、在windows下安装Docker
+
+4.1.双击`InstallDocker.msi`运行安装
+
+4.2.接下来安装向导程序接受指令，接受安装、接下来继续安装
+
+4.3.设置`launch docker`然后完成安装
+
+##### 5.在windows下启动docker
+当你安装完成后，docker会自动启动，蓝鲸状态条表面docker正在运行，而且你可以经过终端进入docker。如果你已经安装了运用程序，将会弹出一个成功的进度条然后建议你进行下一步，并且会连接到下面这个文档。当我们初始化完成之后，选择“about docker”点击进去可以看到docker的版本。到此为止，恭喜您，你已经完成在windows启动和运行docker。
