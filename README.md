@@ -252,5 +252,5 @@ windows下的docker要求windows的系统是win10的企业版、教育版和微�
 
 ##### 3、在windows下安装docker前你需要知道的前提条件
 1、在windows下运行docker要求的前提条件是微软的虚拟化技术，在微软的虚拟化技术使用的情况下，如果虚拟盒子不能正常工作，但是会有一些虚拟盒子的vm镜像会被保留，通过虚拟盒子创建的`docker-machine`将不再启动。windows下的docker的这些VMs不能并行。即使这样，你也可以使用`docker-machine`来管理这些路由VMs。
-2、目前，docker只能运行企业版和教育版的win0上面，将来会支持更多版本的win0。
+2、目前，docker只能运行企业版和教育版的win10上面，将来会支持更多版本的win10。
 3、windows平台下的docker创建的容器和镜像和windows主机之间共享所有用户账户。
