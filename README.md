@@ -53,22 +53,18 @@ _注意.如果你的系统是不满足这些要求的，你能安装Docker Toolb
 
 ##### 1.5.Mac上安装和运行Docker
 * 双击`Docker.dmg`打开安装包，然后拖拽Moby蓝鲸到应用文件夹。在安装过程中你将会被Docker.app请求输入你电脑的系统密码。给予进入特权的需要安装网络组件和链接到Docker应用程序。
-
 ![a][a]
 [a]:https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/1.jpg "a"
 
 * 双击Docker.app启动Docker
-
 ![d][d]
 [d]:https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/2.jpg "d"
 
 * 蓝鲸的头状态条表Docker正在运行，并且是可以从终端进入的。如果你已经安装了这个app，你也会获得暗示下一步成功的消息和链接到这个文档，点击蓝鲸图标在状态条上有下图这样一个显示和弹出
-
 ![b][b]
 [b]:https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/3.jpg "b"
 
 * 点击鲸获取参数和其他选项
-
 ![c][c]
 [c]:https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/14.jpg "c"
 
@@ -100,8 +96,7 @@ _注意.这上面只是一个例子，你的输出结果根据你的版本不同
 * 打开命令行终端，使用Docker命令检查Docker是不像所期望的那样正常工作。可以使用这些命令docker version, docker ps和docker run hello-world来确认Docker是否正常运行，如果这些命令能正常执行,那么就说Docker在运行着。
 * 使用更刺激的方法，运行一个Docker化的web服务器，当然这样做的前提条件是你本地必须有你要运行的镜像。
   
-`docker run -d -p 80:80 --name webserver nginx`
-      
+`docker run -d -p 80:80 --name webserver nginx`     
 ![e][e]
 [e]:https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/5.jpg "e"
 
@@ -142,8 +137,8 @@ nginx web服务器在你停止或者移除容器之前会持续运行着，如�
 
 ##### File sharing 
 
-![f][f]
-[f]:https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/7.png "f"
+![g][g]
+[g]:https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/7.png "g"
 你能够用它来决定在你的Mac平台上的目录是否是容器共享
 * Add a Directory-点击`+`和操纵你想要添加的目录
 * 点击Apply & Restart使目录使用Docker的捆绑峰[-v]特征对当前容器有效。所有这些局限性在目录上是能够共享的它们不能成为已经共享的目录的子目录
@@ -158,8 +153,8 @@ nginx web服务器在你停止或者移除容器之前会持续运行着，如�
 
 * Storage location被重命名为Disk image location
 * Change location按钮被重命名为move disk image
-![g][g]
-[g]:https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/8.png "g"
+![ggg][ggg]
+[ggg]:https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/8.png "ggg"
 
 ##### HTTP 代理设置
 在Mac平台上的Docker将探测HTTP/HTTPS代理设置和自动地将这些设置传播到Docker和传播到你的容器。例如，如果你把的代理设置设置成`http://proxy.example.com`,当拉容器的时候，Docker将使用这个代理设置。
@@ -246,10 +241,14 @@ Windows平台上的docker的安装包含docker在Windows平台上运行的所有
 
 ##### 2.1.stable通道下载
 下载地址为：`https://docs.docker.com/docker-for-windows/install/#download-docker-for-windows`
+![l][l]
+[l]:https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/15.jpg "l"
 
 
 ##### 2.2.edge通道下载
 下载地址为：`https://docs.docker.com/docker-for-windows/install/#download-docker-for-windows`
+![m][m]
+[m]:https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/15.jpg "m"
 
 ##### 注意：
 windows下的docker要求windows的系统是win10的企业版、教育版和微软虚拟化技术版本的。请您仔细看看你在安装需要了解的所有先决条件清单。虽然你可以选择安装stable通道或者edge通道中的docker，但是在同一个时间段你不能同时安装两个通道中的docker，在你安装另一个版本的docker和卸载这个版本的docker前，你需要保存保存镜像和导出容器。
@@ -276,6 +275,10 @@ windows下的docker要求windows的系统是win10的企业版、教育版和微�
 4.2.接下来安装向导程序接受指令，接受安装、接下来继续安装
 
 4.3.设置`launch docker`然后完成安装
+![n][n]
+[n]:https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/16.jpg "n"
 
 ##### 5.在windows下启动docker
 当你安装完成后，docker会自动启动，蓝鲸状态条表面docker正在运行，而且你可以经过终端进入docker。如果你已经安装了运用程序，将会弹出一个成功的进度条然后建议你进行下一步，并且会连接到下面这个文档。当我们初始化完成之后，选择“about docker”点击进去可以看到docker的版本。到此为止，恭喜您，你已经完成在windows启动和运行docker。
+![o][o]
+[o]:https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/16.jpg "o"
