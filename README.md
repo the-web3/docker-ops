@@ -234,11 +234,16 @@ Uninstall--选择卸载选项是从你的Mac系统中移出DockerReset to factor
 
 ### 第二节:Windows平台上Docker安装与使用
 
+#### 1.在windows平台上安装docker
+Windows平台上的docker的安装包含docker在Windows平台上运行的所有的依赖包，这里最主要介绍安装前需要考虑的因素和在Windows平台上怎么样下载和安装docker。如果你已经安装了docker，并且准备启动它了。那么你可以跳过此步去学习怎么使用命令行操作docker，docker的配置和docker工具的使用。查看版本发布的注意事项请看`https://docs.docker.com/docker-for-windows/release-notes/`。
+
+#### 2.下载windows平台下的docker
+如果你已经做了下载了windows版本下的docker，那么你可以直接安装。windows平台的docker的下载和mac平台下类似，也有两种下载方式。
+
+##### 2.1.stable通道下载
+下载地址为：`https://docs.docker.com/docker-for-windows/install/#download-docker-for-windows`
 
 
-
-
-
-
-
+##### 2.2.edge通道下载
+下载地址为：`https://docs.docker.com/docker-for-windows/install/#download-docker-for-windows`
 
