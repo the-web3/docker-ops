@@ -409,6 +409,7 @@ edge版本的配置命令，在上面命令行stable的后面添加一个edge即
    `sudo apt-get update`
    
 2.安装最新版本的docker或者安装指定版本的docker。使用下面的命令安装最新版本的docker
+
 DockerCE的安装命令:     
       	
        sudo apt-get install docker-ce
