@@ -417,4 +417,11 @@ DockerCE的安装命令:
 DockerEE的安装命令:
 
     sudo apt-get install docker-ee
+注意：如果有多个仓库能用，在执行apt-get install和apt-get update命令时没有指定docker的版本那么默认安装的版本是docker的最新版本。
+
+3.在生产环境上，如果你安装指定版本的docker来代替最新版本的docker，输出将会被截断，接而列出所有的可用版本，DockerEE的客户端上可以看到DockerCE
+
+    $ apt-cache madison docker-ce
+    docker-ce | 17.03.0~ce-0~ubuntu-xenial | https://download.docker.com/linux/ubuntu xenial/stable amd64 Packages
+4.
        
