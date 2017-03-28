@@ -412,9 +412,9 @@ edge版本的配置命令，在上面命令行stable的后面添加一个edge即
 
 DockerCE的安装命令:     
       	
-       sudo apt-get install docker-ce
+    sudo apt-get install docker-ce
        
 DockerEE的安装命令:
 
-      	sudo apt-get install docker-ee
+    sudo apt-get install docker-ee
        
