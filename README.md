@@ -324,3 +324,96 @@ windows下的docker要求windows的系统是win10的企业版、教育版和微�
         linux-image-extra-virtual
         
 #### 2.安装docker
+你可以根据你的开发需求以不同的方式安装docker。
+1、大多数用户通过配置docker容器，并通过docker容器来安装他们的docker，这样可以减少安装和更新的工作量。也就是说自动的，这是这也官方比较推荐的方法。
+2、很多用户通过下载DEB包来手动安装并且通过手动更新docker，这也是个有效的解决方案，例如在有缺陷的系统上安装docker是不需要使用网络。
+
+##### 2.1.安装使用仓库
+在你第一次在一台新主机上安装docker时，你需要配置一些docker的仓库，然后，你能够从仓库中安装个更新docker。
+
+###### 2.1.设置仓库
+设置DockerEE和DockerCE的方式是不同，下面将会介绍这两种仓库的设置
+###### DockerCE
+1.安装一些允许apt在HTTPS上使用一个仓库
+
+     sudo apt-get install \
+        apt-transport-https \
+        ca-certificates \
+        curl \
+        software-properties-common
+        
+2.添加一个docker官方的GPG密钥
+     
+    $ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+认证的密钥指纹是`9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88`
+3.执行下面的命令
+
+    $ sudo apt-key fingerprint 0EBFCD88
+
+    pub   4096R/0EBFCD88 2017-02-22
+          Key fingerprint = 9DC8 5822 9FC7 DD38 854A  E2D8 8D81 803C 0EBF CD88
+    uid                  Docker Release (CE deb) <docker@docker.com>
+    sub   4096R/F273FCD8 2017-02-22
+
+4.使用下面的命令来配置stable版本的仓库，你也可以安装edge版本的仓库
+
+stable版本的配置命令
+
+    $ sudo add-apt-repository \
+       "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+       $(lsb_release -cs) \
+       stable"
+       
+edge版本的配置命令，在上面命令行stable的后面添加一个edge即可
+ 
+    $ sudo add-apt-repository \
+          "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+          $(lsb_release -cs) \
+          stable edge" 
+       
+###### DockerEE 
+1.安装一些包允许apt通过HTTPS使用仓库
+
+    $ sudo apt-get install \
+        apt-transport-https \
+        ca-certificates \
+        curl \
+        software-properties-common
+
+2.使用dockerEE客户端的地址添加官方GPG密钥
+
+    $ curl -fsSL <DOCKER-EE-URL>/gpg | sudo apt-key add -
+    
+3.认证密钥指纹是：`DD91 1E99 5A64 A202 E859 07D6 BC14 F10B 6D08 5F96`
+
+    $ apt-key fingerprint 0EBFCD88
+         pub   4096R/6D085F96 2017-02-22
+             Key fingerprint = DD91 1E99 5A64 A202 E859  07D6 BC14 F10B 6D08 5F96
+         uid       [ultimate] Docker Release (EE deb) <docker@docker.com>
+         sub   4096R/91A29FA3 2017-02-22
+         
+4.使用下面的地址来设置stable仓库，使用你在先决条件注意下面的url地址替代你的Docker-EE-URL
+
+注意：这个命令`lsb_release -cs`返回的是Ubuntu分布式系统的名字，例如：`xenial`
+
+    $ sudo add-apt-repository \
+        "deb [arch=amd64] <DOCKER-EE-URL> \
+        $(lsb_release -cs) \
+        stable-17.03"
+        
+###### 正式安装docker
+
+1、更新apt
+
+   `sudo apt-get update`
+   
+2.安装最新版本的docker或者安装指定版本的docker。使用下面的命令安装最新版本的docker
+DockerCE的安装命令:     
+      	
+       sudo apt-get install docker-ce
+       
+DockerEE的安装命令:
+
+      	sudo apt-get install docker-ee
+       
