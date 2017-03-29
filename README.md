@@ -510,3 +510,20 @@ DockerCE不能再Redhat上使用
 #####  安装DockerEE
 你可以根据你的需求按照不同的方式来安装DockerEE
 大多数用户通过配置Docker仓库的方式来安装Docker，这样可以减少一些安装和升级的任务，这是官方比较推荐的方法(其实，官方挺喜欢这样的搞，因为你可以经常用他的软件了)。
+
+许多用户下载RPM包手动地安装Docker和完全手动管理docker的升级，这是一个很好的方案例如一些有缺陷的系统不用连接网络也能安装Docker。
+
+###### 通过仓库来安装
+在你首次在一台新主机上安装docker之前，你需要配置docker仓库，接下来你才通过仓库来安装和更新docker，
+1、配置docker仓库
+   从`/etc/yum.repos.d/`移除已经存在的Docker仓库
+2、在`/etc/yum/vars/`里面存储两个变量
+   在这里面`/etc/yum/vars/dockerurl`存储EE的地址，把这项`<DOCKER-EE-URL>`替换成你在先决条件的中的URL地址，
+   
+       $ sudo sh -c 'echo "<DOCKER-EE-URL>" > /etc/yum/vars/dockerurl'
+       
+3、在这`/etc/yum/vars/dockerosversion`里面存储RHEL版本的字符串，从面的表中获取恰当的值，大多数用户使用7，
+
+图片18:
+    ![图片18](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/18.png  "图片18")
+    
