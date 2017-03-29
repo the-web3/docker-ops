@@ -423,5 +423,56 @@ DockerEE的安装命令:
 
     $ apt-cache madison docker-ce
     docker-ce | 17.03.0~ce-0~ubuntu-xenial | https://download.docker.com/linux/ubuntu xenial/stable amd64 Packages
-4.
+
+4.通过运行hello world镜像来查看DockerEE或者DockerCE是不是安装正确
+
+    $ sudo docker run hello-world
+这个命令会下载一个test镜像并且将该镜像运行在容器中，当容器运行时，他会打印信息和退出
+
+Docker的安装和运行需要使用root用户的权限才能操作，这样安装后允许非特权的docker用户能够运行docker命令并且可以配置其他的配置项。
+
+5、升级Docker
+想要升级Docker，首先你需要执行命令`sudo apt-get update`, 接着安装设备，选择你所需要的版本的Docker来安装。
+
+6、从包中安装
+如果你不想通过仓库来安装Docker，那么你可以通过在下`.deb`文件来手动地安装Docker，如果你想更新Docker，你每次都需要下载一个新文件来手动地更新Docker。
+
+1）、这一步对于DockerCE和DockerEE来说是不同的
+ DockerCE:去这个网站： https://download.docker.com/linux/ubuntu/dists/；选中你的Ubuntu版本，浏览`stable/pool/stable/amd64/`;选择与你的Ubuntu版本对应下的`.deb`版本的文件。
+ 
+   注意：如果想要安装edge版本的包，把`stable/pool/stable/amd64/`改为`edge/pool/stable/amd64/`。
+ 
+ DockerEE：同样是去相应的网站下载相关的包，`x86_64/stable-17.03`,
+ 
+ 2）、安装Docker，把下面的`path`改变为你下载Docker包的地址。
+ 
+     $ sudo dpkg -i /path/to/package.deb
+     
+ Docker守护进程就会自动启动起来。
+ 
+ 3）、通过运行hello world镜像来查看DockerEE或者DockerCE是不是安装正确
+
+     $ sudo docker run hello-world
+     
+     
+ 这个命令会下载一个test镜像并且将该镜像运行在容器中，当容器运行时，他会打印信息和退出
+
+Docker的安装和运行需要使用root用户的权限才能操作，这样安装后允许非特权的docker用户能够运行docker命令并且可以配置其他的配置项。
+
+4）、升级Docker
+想要升级Docker，首先你需要执行命令`sudo apt-get update`, 接着安装设备，选择你所需要的版本的Docker来安装。
+
+5）、从包中安装
+如果你不想通过仓库来安装Docker，那么你可以通过在下`.deb`文件来手动地安装Docker，如果你想更新Docker，你每次都需要下载一个新文件来手动地更新Docker。
+
+7、卸载Docker
+
+1）、卸载Docker包
+
+    DockerCE：sudo apt-get purge docker-ce
+    DockerEE：sudo apt-get purge docker-ee
+    
+2）、你主机上的镜像、容器、数据卷和自定义配置文件是不会自动移除的，删除所有的镜像、容器和数据卷，你需要使用下面的命令
+
+     sudo rm -rf /var/lib/docker
        
