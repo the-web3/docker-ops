@@ -509,6 +509,4 @@ DockerCE不能再Redhat上使用
 
 #####  安装DockerEE
 你可以根据你的需求按照不同的方式来安装DockerEE
-大多数用户通过
-图片18:
-    ![图片18](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/18.png  "图片18")
+大多数用户通过配置Docker仓库的方式来安装Docker，这样可以减少一些安装和升级的任务，这是官方比较推荐的方法(其实，官方挺喜欢这样的搞，因为你可以经常用他的软件了)。
