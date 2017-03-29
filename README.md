@@ -438,7 +438,7 @@ Docker的安装和运行需要使用root用户的权限才能操作，这样安�
 如果你不想通过仓库来安装Docker，那么你可以通过在下`.deb`文件来手动地安装Docker，如果你想更新Docker，你每次都需要下载一个新文件来手动地更新Docker。
 
 1）、这一步对于DockerCE和DockerEE来说是不同的
- DockerCE:去这个网站： https://download.docker.com/linux/ubuntu/dists/；选中你的Ubuntu版本，浏览`stable/pool/stable/amd64/`;选择与你的Ubuntu版本对应下的`.deb`版本的文件。
+ DockerCE:去这个网站： https://download.docker.com/linux/ubuntu/dists/； 选中你的Ubuntu版本，浏览`stable/pool/stable/amd64/`;选择与你的Ubuntu版本对应下的`.deb`版本的文件。
  
    注意：如果想要安装edge版本的包，把`stable/pool/stable/amd64/`改为`edge/pool/stable/amd64/`。
  
