@@ -510,3 +510,5 @@ DockerCE不能再Redhat上使用
 #####  安装DockerEE
 你可以根据你的需求按照不同的方式来安装DockerEE
 大多数用户通过
+图片18:
+    ![图片18](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/18.png  "图片18")
