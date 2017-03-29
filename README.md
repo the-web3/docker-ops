@@ -29,6 +29,7 @@ _你的Mac本上是否已经安装了Docker,如果已经安装了Docker，你可
 Ipvlan网络驱动器
 Docker堆栈和分布式应用程序软件集
 检查点和恢复
+
 ###### 怎么样评判这些特征
 此处的内容没什么用，主要是关于这些特征的更改建议。
 ##### 1.4.Beta Docker下载
@@ -551,5 +552,63 @@ DockerCE不能再Redhat上使用
  
     $ sudo yum -y install docker-ee
     
-3、
+3、在生产环境上，你可以安装指定版本的Docker来替代最新版本的Docker，使用`sort -r`按版本号从高到底的顺序列出所有可以使用的docker版本，并且使截断输出的。
+注意: yum list这个命令仅仅显示二进制包，为了显示源包，从包名中省略`.x86_64 `。
+
+    $ yum list docker-ee.x86_64  --showduplicates |sort -r
+
+    docker-ee.x86_64  17.03.0.el7                               docker-ee-stable   
+列出的内容依赖于能够使用的的仓库和指定的RHEL版本，选择一个指定的版本来安装，第二列是版本字符串，第三列是仓库的名字，安装指定的版本，添加版本号到包名并且通过连字符来分离他们
+
+     $ sudo yum -y install docker-ee-<VERSION_STRING>
+     
+4、启动docker
+
+     $ sudo systemctl start docker
+     
+5、通过运行hello world镜像来查看检验Docker是不是安装正确
+
+     $ sudo docker run hello-world
+     
+这个命令会下载一个test镜像并且将该镜像运行在容器中，当容器运行时，他会打印信息和退出
+Docker的安装和运行需要使用root用户的权限才能操作，这样安装后允许非特权的docker用户能够运行docker命令并且可以配置其他的配置项。
+
+###### 升级DockerEE
+
+想要升级DockerEE，首先运行着个命令`sudo yum makecache fast`，然后接下来安装设备，选择新的你想要安装的Docker。
+
+###### 安装包
+如果你不使用官方的Docker仓库来安装Docker，你可以下载发布的`.rpm`文件来手动地安装你的Docker，如果你想要升级Docker，每次你都得下载一个新的文件。
+
+1、去你浏览中尝试和签署的与DockerEE有联系的URL地址下，然后去`7/x86_64/stable-17.03/Packages`根据你要安装的Docker的版本下载`.rpm`文件。
+
+2、安装Docker，把下面的`path`改变为你下载Docker包的地址。
  
+     $ sudo yum install /path/to/package.rpm
+     
+3、启动Docker
+    
+    $ sudo systemctl start docker
+ 
+4、通过运行hello world镜像来查看DockerEE或者DockerCE是不是安装正确
+
+     $ sudo docker run hello-world
+     
+这个命令会下载一个test镜像并且将该镜像运行在容器中，当容器运行时，他会打印信息和退出
+Docker的安装和运行需要使用root用户的权限才能操作，这样安装后允许非特权的docker用户能够运行docker命令并且可以配置其他的配置项。
+
+###### 升级DockerEE
+
+为了升级Docker，下载新的文件包并且重新安装程序，使用这个命令`yum -y upgrade`来替代这个命令`yum -y install`,并且指向新的文件
+
+###### 卸载DockerEE
+1、卸载DockerEE包
+
+    $ sudo yum -y remove docker-ee
+    
+2、在你主机上的镜像、容器、数据卷和自定义的文件不会自动移除，为了删除所有的容器、镜像和数据卷，使用下面的命令
+ 
+    $ sudo rm -rf /var/lib/docker
+
+你必须手动地删除一些编辑的配置文件。
+
