@@ -527,3 +527,29 @@ DockerCE不能再Redhat上使用
 图片18:
     ![图片18](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/18.png  "图片18")
     
+         $ sudo sh -c 'echo "<VERSION-STRING>" > /etc/yum/vars/dockerosversion'
+         
+         
+4、安装提供了`yum-config-manager`这个功能的`yum-utils`
+
+    $ sudo yum install -y yum-utils
+    
+5、使用下面的命令来增加`stable `仓库
+
+    $ sudo yum-config-manager \
+       --add-repo \
+       <DOCKER-EE-URL>/docker-ee.repo
+       
+###### 安装Docker
+1、更新`yum`包
+
+    $ sudo yum makecache fast
+    
+如果第一时间你刷新了包的索引，这样会增加Docker仓库，也将会促使你接受GPG密钥，并且密钥的指纹将会被显示认证指纹匹配`DD91 1E99 5A64 A202 E859 07D6 BC14 F10B 6D08 5F96`,如果发生这样的事，请你接密钥。
+
+2、安装最新版本的Docker或者去`next step`中安装指定版本的Docker
+ 
+    $ sudo yum -y install docker-ee
+    
+3、
+ 
