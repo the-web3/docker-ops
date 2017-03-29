@@ -475,4 +475,38 @@ Docker的安装和运行需要使用root用户的权限才能操作，这样安�
 2）、你主机上的镜像、容器、数据卷和自定义配置文件是不会自动移除的，删除所有的镜像、容器和数据卷，你需要使用下面的命令
 
      sudo rm -rf /var/lib/docker
-       
+     
+ 
+#### 2、在Red Hat Enterprise下安装docker
+要想在红帽子上安装Docker，确信你满足前提条件，然后在安装Docker
+
+##### 2.1、先决条件
+
+##### 2.1.1、DockerEE仓库的URL
+为了安装企业版本的Docker，你需要明白你DockerEE的URL与你的试验和签署联系到一起，下面是获取这些信息的途径和方法。
+1、输入这个URL地址进入这个网站: `https://store.docker.com/?overlay=subscriptions`。
+2、在`Docker Enterprise Edition for Ubuntu`部分中的里面选择 `Get Details/Setup Instructions`这两项。
+3、从域区域中拷贝，点击这个即可：`Copy and paste this URL to download your Edition`。
+当你看到站位文本为`<DOCKER-EE-URL>`使用URL地址，要学习更多关于Docker EE的东西，看这个`Docker Enterprise Edition`部分的内容。
+DockerCE不能再Redhat上使用
+
+###### 系统要满足的条件
+为了安装Docker，你需要是RHEL7版本的64位的Redhat操作系统。
+
+###### 卸载老版本的Docker
+
+老版本的Docker也称为`docker`或者`docker-engine`，如果安装了这些，卸载他们和卸载他们的依赖项
+
+     $ sudo yum remove docker \
+                       docker-common \
+                       container-selinux \
+                       docker-selinux \
+                       docker-engine
+                       
+如果yum报告这些包没有一个被安装那么就是OK的啦。
+
+`/var/lib/docker/`的内容，包括镜像，容器、数据卷和网络都被保留，DockerEE包现在被称为`docker-ee`
+
+#####  安装DockerEE
+你可以根据你的需求按照不同的方式来安装DockerEE
+大多数用户通过
