@@ -643,3 +643,5 @@ DockerCE不能再Redhat上使用
 `/var/lib/docker/`的内容，包括镜像，容器、数据卷和网络都被保留，DockerEE包现在被称为`docker-ee`
 
 以下内容和红帽子下安装Docker相似
+
+#### 3、在Fedora下安装docker
