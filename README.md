@@ -645,3 +645,30 @@ DockerCE不能再Redhat上使用
 以下内容和红帽子下安装Docker相似
 
 #### 3、在Fedora下安装docker
+要在Fedora下面安装Docker,确保你满足下面的先决条件，然后再安装Docker。
+
+##### 先决条件
+DockerEE客户端：
+DockerEE不支持Fedora平台，
+
+##### 系统满足的条件
+为了安装Dockers，你需要64位的Fedora下面这些版本中的一个：
+- 24
+- 25
+
+##### 卸载老版本的Docker
+老版本的Dockers称为docker或者docker-engine，如果你安装了他们，想要卸载Docker，使用下面的命令
+
+    $ sudo dnf remove docker \
+                     docker-common \
+                     container-selinux \
+                     docker-selinux \
+                     docker-engine
+                     
+ 如果dnf报告这些包没有一个被安装，那么久OK了。
+ `/var/lib/docker/`的内容是被隐藏的，里面包含了镜像，容器，数据券和网络；DockerCE包现在被称为docker-ce。
+ 
+ ##### 安装DockerCE
+
+
+
