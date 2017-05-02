@@ -669,6 +669,8 @@ DockerEE不支持Fedora平台，
  `/var/lib/docker/`的内容是被隐藏的，里面包含了镜像，容器，数据券和网络；DockerCE包现在被称为docker-ce。
  
  ##### 安装DockerCE
+ 你可以根据你的需求用不同的方式来安装DockerCE：
+ - 
 
 
 
