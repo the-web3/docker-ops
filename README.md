@@ -695,6 +695,9 @@ DockerEE不支持Fedora平台，
 
     $ sudo dnf config-manager --set-disabled docker-ce-edge
 
-
+##### 安装dockerCE
+更新dnf包索引
+ 
+    $ sudo dnf makecache fast
 
 
