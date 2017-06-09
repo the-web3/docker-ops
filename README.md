@@ -665,12 +665,36 @@ DockerEE不支持Fedora平台，
                      docker-selinux \
                      docker-engine
                      
- 如果dnf报告这些包没有一个被安装，那么久OK了。
- `/var/lib/docker/`的内容是被隐藏的，里面包含了镜像，容器，数据券和网络；DockerCE包现在被称为docker-ce。
+如果dnf报告这些包没有一个被安装，那么久OK了。
+`/var/lib/docker/`的内容是被隐藏的，里面包含了镜像，容器，数据券和网络；DockerCE包现在被称为docker-ce。
  
  ##### 安装DockerCE
- 你可以根据你的需求用不同的方式来安装DockerCE：
- - 
+ 
+你可以根据你的需求用不同的方式来安装DockerCE：
+- 大多数用户通过配置docker仓库来安装docker，这样做的优点是每一次安装和更新任务都是轻松的。这也是官方比较推荐的方法。
+- 一些用户下载PRM包手动地安装docker并且升级的时候也是完全手动的。这是在没有和外界网络连接的主机上安装docker的有效方法
+
+##### 安装使用仓库
+在你在你的新主机上第一次安装docker之前，你需要配置docker仓库，以后你就可以通过仓库来安装和更新docker，
+ 
+###### 配置docker仓库
+安装提供命令管理DNF仓库的`dnf-plugins-core`包
+
+    $ sudo dnf -y install dnf-plugins-core
+使用下面的命令配置stable仓库，你总是需要stable容器，即使你也想过安装edge仓库
+
+    $ sudo dnf config-manager \
+        --add-repo \
+        https://download.docker.com/linux/fedora/docker-ce.repo
+
+可选择的：能用的边缘仓库，这个仓库包含在docker.repo上但是默认是不能用的，你可以在stable仓库变使它变得可用
+
+    $ sudo dnf config-manager --set-enabled docker-ce-edge
+    
+你可以通过运行DNF带有--disable flag的配置管理命令来是edge仓库不能用，下面这条命令是使edge仓库不能被使用的命令
+
+    $ sudo dnf config-manager --set-disabled docker-ce-edge
+
 
 
 
