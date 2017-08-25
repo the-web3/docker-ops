@@ -735,5 +735,12 @@ DockerEE不支持Fedora平台，
 
 ##### 虚拟机图解
 
+图片31： 
+    ![图片31](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/QQ%E6%88%AA%E5%9B%BE20170825181106.png  "图片31")
+
+#### 容器图解
+
+图片32:
+   ![图片32](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/QQ%E6%88%AA%E5%9B%BE20170825181124.png  "图片32") 
 
 
