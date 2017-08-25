@@ -738,6 +738,11 @@ DockerEE不支持Fedora平台，
 图片31： 
     ![图片31](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/QQ%E6%88%AA%E5%9B%BE20170825181106.png  "图片31")
 
+虚拟机运行在客户机操作系统上-每个盒子中的OS层，资源是密集的，
+
+Virtual machines run guest operating systems—note the OS layer in each box. This is resource intensive, and the resulting disk image and application state is an entanglement of OS settings, system-installed dependencies, OS security patches, and other easy-to-lose, hard-to-replicate ephemera.
+
+
 #### 容器图解
 
 图片32:
