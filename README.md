@@ -748,4 +748,178 @@ Virtual machines run guest operating systems—note the OS layer in each box. Th
 图片32:
    ![图片32](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/QQ%E6%88%AA%E5%9B%BE20170825181124.png  "图片32") 
 
+#### 准备你的Docker环境
+
+在支持Docker的平台上安装维护Docker社区版或者安装维护Docker企业版，安装Docker的步骤请参见第一章。
+
+#### 测试docker版本
+请确保你的设备上安装好能使用的Docker
+    
+命令行：`docker --version`
+ 
+    guosjdeMacBook:~ guo$ docker --version
+    Docker version 17.09.0-ce, build afdb6d4
+    guosjdeMacBook:~ guo$
+    
+ 运行`docker version`(没有--)或者`docker info`查看关于你安装的Docker的更详细的信息。如下：
+ 
+ 
+ 运行`docker version`(没有--)或者`docker info`查看关于你安装的Docker的更详细的信息。如下
+ 
+    guosjdeMacBook:~ guo$ docker version
+    Client:
+     Version:      17.09.0-ce
+     API version:  1.32
+     Go version:   go1.8.3
+     Git commit:   afdb6d4
+     Built:        Tue Sep 26 22:40:09 2017
+     OS/Arch:      darwin/amd64
+
+    Server:
+     Version:      17.09.0-ce
+     API version:  1.32 (minimum version 1.12)
+     Go version:   go1.8.3
+     Git commit:   afdb6d4
+     Built:        Tue Sep 26 22:45:38 2017
+     OS/Arch:      linux/amd64
+     Experimental: true
+    guosjdeMacBook:~ guo$
+    
+    
+    guosjdeMacBook:~ guo$ docker info
+    Containers: 2
+     Running: 0
+     Paused: 0
+     Stopped: 2
+    Images: 2
+    Server Version: 17.09.0-ce
+    Storage Driver: overlay2
+     Backing Filesystem: extfs
+     Supports d_type: true
+     Native Overlay Diff: true
+    Logging Driver: json-file
+    Cgroup Driver: cgroupfs
+    Plugins:
+     Volume: local
+     Network: bridge host ipvlan macvlan null overlay
+     Log: awslogs fluentd gcplogs gelf journald json-file logentries splunk syslog
+    Swarm: inactive
+    Runtimes: runc
+    Default Runtime: runc
+    Init Binary: docker-init
+    containerd version: 06b9cb35161009dcb7123345749fef02f7cea8e0
+    runc version: 3f2f8b84a77f73d38244dd690525642a72156c64
+    init version: 949e6fa
+    Security Options:
+     seccomp
+      Profile: default
+    Kernel Version: 4.9.49-moby
+    Operating System: Alpine Linux v3.5
+    OSType: linux
+    Architecture: x86_64
+    CPUs: 2
+    Total Memory: 1.952GiB
+    Name: moby
+    ID: SJ5J:F7GW:46UT:FCIR:SPFW:VRDL:3AUM:JLU3:CI2E:GT2R:I42K:AJ7Y
+    Docker Root Dir: /var/lib/docker
+    Debug Mode (client): false
+    Debug Mode (server): true
+     File Descriptors: 18
+     Goroutines: 29
+     System Time: 2018-02-12T01:28:52.285678754Z
+     EventsListeners: 1
+    No Proxy: *.local, 169.254/16
+    Registry: https://index.docker.io/v1/
+    Experimental: true
+    Insecure Registries:
+     127.0.0.0/8
+    Live Restore Enabled: false
+
+    guosjdeMacBook:~ guo$
+    
+注意：为避免权限错误，请添加您的用户到docker组，或者使用超级用户权限
+
+#### 测试Docker的安装
+
+通过运行一个简单的hello world镜像来测试你的安装
+命令行：`docker run hello-world`
+
+    guosjdeMacBook:~ guo$ docker run hello-world
+    Hello from Docker!
+    This message shows that your installation appears to be working correctly.
+
+    To generate this message, Docker took the following steps:
+     1. The Docker client contacted the Docker daemon.
+     2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+        (amd64)
+     3. The Docker daemon created a new container from that image which runs the
+        executable that produces the output you are currently reading.
+     4. The Docker daemon streamed that output to the Docker client, which sent it
+        to your terminal.
+
+    To try something more ambitious, you can run an Ubuntu container with:
+     $ docker run -it ubuntu bash
+
+    Share images, automate workflows, and more with a free Docker ID:
+     https://cloud.docker.com/
+
+    For more examples and ideas, visit:
+     https://docs.docker.com/engine/userguide/
+
+    guosjdeMacBook:~ guo$
+
+注意：如果你是新安装的docker，正常情况下是没有镜像的，当你运行docker run + 镜像名字的时候，docker会自动去下载官方镜像；当hello-world镜像下载到你的设备上时，使用`docker images ls`可以列出所有镜像，下面是我的设备上的可以列出的镜像：
+
+    guosjdeMacBook:~ guo$ docker images ls
+    REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+    guosjdeMacBook:~ guo$ docker image ls
+    REPOSITORY                                                TAG                 IMAGE ID            CREATED             SIZE
+    hello-world                                               latest              f2a91732366c        2 months ago        1.85kB
+    registry.cn-hangzhou.aliyuncs.com/denverdino/tensorflow   latest              df6e19313fd7        5 months ago        1.21GB
+    kaixhin/theano                                            latest              b2f646041184        6 months ago        634MB
+    guosjdeMacBook:~ guo$
+    
+列出容器（通过那个镜像产生的容器），如果镜像一直运行着，那么你不可以使用`-- all`选项：
+
+    guosjdeMacBook:~ guo$ docker container ls --all
+    CONTAINER ID        IMAGE                                                     COMMAND             CREATED             STATUS                      PORTS                NAMES
+    c58dec734321        hello-world                                               "/hello"            11 minutes ago      Exited (0) 11 minutes ago                        hungry_nightingale
+    c3bcd1d52eb1        hello-world                                               "/hello"            11 minutes ago      Exited (0) 11 minutes ago                        quirky_clarke
+    3cb3f43adae6        hello-world                                               "/hello"            11 minutes ago      Exited (0) 11 minutes ago                        gifted_montalcini
+    d362e8fe6bdb        kaixhin/theano                                            "/bin/bash"         2 months ago        Exited (255) 2 months ago                        cranky_snyder
+    3b77a144a920        registry.cn-hangzhou.aliyuncs.com/denverdino/tensorflow   "/bin/bash"         2 months ago        Exited (255) 2 months ago   6006/tcp, 8888/tcp   dreamy_perlman
+    guosjdeMacBook:~ guo$
+
+#### 本部分命令行总结
+
+##### List Docker CLI commands
+docker
+docker container --help
+
+##### 显示docker的版本或者信息
+docker --version
+docker version
+docker info
+
+##### 运行docker镜像
+docker run hello-world
+
+##### 列出docker镜像
+docker image ls
+
+## 列出docker容器（-all参数，-a -q参数）
+docker container ls
+docker container ls -all
+docker container ls -a -q
+
+#### 第一部分总结
+
+
+
+
+
+
+
+
+
 
