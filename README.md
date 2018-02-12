@@ -907,12 +907,19 @@ docker run hello-world
 ##### 列出docker镜像
 docker image ls
 
-## 列出docker容器（-all参数，-a -q参数）
+##### 列出docker容器（-all参数，-a -q参数）
 docker container ls
 docker container ls -all
 docker container ls -a -q
 
 #### 第一部分总结
+
+容器化使得能够CI/CD无缝结合，列如：
+1.应用程序不再依赖系统
+2.更新能够推送一部分分布应用
+3.资源的密度能够得到优化
+也就是说，使用Docker,不在使用重量级虚拟主机，也能使得你的应用程序快速部署执行。
+
 
 
 
