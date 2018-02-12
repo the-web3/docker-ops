@@ -947,7 +947,7 @@ docker container ls -a -q
 
 Dockerfile文件中定义了你环境上的容器内部是怎么运行的。可访问资源如网络和硬盘驱动在这个环境中是虚拟化的，它与你的系统息息相关，因此，你需要映射端口到外部网络，并且需要制定什么文件你想要”拷入“环境中。当然，做完之后，你在Dockerfile中按你的想法构建无论什么环境都能运行的应用程序。
 
-##### DockerFile
+##### 5.DockerFile
 创建一个空的目录，使用`cd`命令进入新目录中，创建一个名叫dockerfile的文件，拷贝复制下面的内容到文件中并且保存它。在心的dockerfile文件中写下注释与解释。
 
     # Use an official Python runtime as a parent image
@@ -971,17 +971,82 @@ Dockerfile文件中定义了你环境上的容器内部是怎么运行的。可�
     # Run app.py when the container launches
     CMD ["python", "app.py"]
     
+##### 1）在代理服务器的后面？
+一旦web程序运行，代理服务器能够锁定并连接到web应用程序。如果你在代理服务器的后面，添加下面内容到Dockerfile文件，使用ENV命令行为你的代理服务器指定主机和端口号：
+
+    # Set proxy server, replace host:port with values for your servers
+    ENV http_proxy host:port
+    ENV https_proxy host:port
+    
+在这些线之前称之为 `pip`,这样使得安装能够成功。
+
+这个Dockerfile文件涉及到一对没有创建的文件，名叫app.py和requirements.txt。接下来我们创建他们：
+
+##### 2）应用程序自己创建
+创建两个或者更多文件，requirement.txt和app.py,接着使用dockerfile将他们放到同意文件夹下面。这就完成了应用程序的创建，是不是看起来很简单。当上面的Dockerfile被创建如镜像时，由于Dockerfile中添加了命令行，app.py和requirements.txt是会被呈现的。因为EXPOSE命令行外部通过app.py是可以访问HTTP服务的。
+
+###### requirements.txt
+
+    Flask
+    Redis 
     
+###### app.py
 
 
+    from flask import Flask
+    from redis import Redis, RedisError
+    import os
+    import socket
 
+    # Connect to Redis
+    redis = Redis(host="redis", db=0, socket_connect_timeout=2, socket_timeout=2)
 
+    app = Flask(__name__)
 
+    @app.route("/")
+    def hello():
+        try:
+            visits = redis.incr("counter")
+        except RedisError:
+            visits = "<i>cannot connect to Redis, counter disabled</i>"
 
+        html = "<h3>Hello {name}!</h3>" \
+               "<b>Hostname:</b> {hostname}<br/>" \
+               "<b>Visits:</b> {visits}"
+        return html.format(name=os.getenv("NAME", "world"), hostname=socket.gethostname(), visits=visits)
 
+    if __name__ == "__main__":
+        app.run(host='0.0.0.0', port=80)
 
+现在我们可以使用`pip install -r requirements.txt`安装为Python程序安装FLask和Redis库，应用程序将打印环境变量，也会调用socket.gethosname()来输出主机名字。最终，因为Redis并没有运行（原因是我们只安装了Python库，没有让Redis自己安装），我们应该尝试在这里使用失败的时候打印错误信息。
 
+注意：当内部的容器检索容器ID时进入主机名字，就像可执行程序运行时的进程ID
 
+是的，在你的系统上你不需要Python或者requirements.txt文件中的其他东西，你就可在你的系统上运行镜像安装他们。这似乎也不需要你去配置Python和Flask的环境，但是你得配置。
+
+#### 3）构建自己的应用程序
+我们准备好构建自己的应用程序了，确保你的新目录仍然在栈的最顶层，`ls`这个命令可以直观的看到
+
+    $ ls
+    Dockerfile		app.py			requirements.txt
+现在运行构建命令，这将会创建一个Docker镜像，使用-t参数会有一个友好的名字
+
+    docker build -t friendlyhello .
+    
+你在哪儿构建镜像，是在你的机器上的本地Docker镜像仓库：
+
+    $ docker image ls
+
+    REPOSITORY            TAG                 IMAGE ID
+    friendlyhello         latest              326387cea398
+
+#### 4.运行你的应用程序
+
+运行应用程序，将你机器的4000端口映射到容器的公共80端口，使用-p参数
+
+    docker run -p 4000:80 friendlyhello
+    
+ 
 
 
 
