@@ -935,7 +935,7 @@ docker container ls -a -q
 * 服务
 * 容器（本节介绍）
 
-#### 新的开发环境
+#### 3.新的开发环境
 
 在以前，如果你写一个Python程序，首先要做的第一件事就是在你的设备上安装Python，然后在你的机器上运行Python。但是，当你在你机器上构建环境时，你需要考虑你所构建的环境能够让你的应用程序能够执行，而且必须和你的生成环境一致。
 
@@ -943,7 +943,37 @@ docker container ls -a -q
 
 这些便捷式的镜像被定义在一个叫做dockerfile的文件中
 
-#### 使用Dockerfile文件定义一个容器
+#### 4.使用Dockerfile文件定义一个容器
+
+Dockerfile文件中定义了你环境上的容器内部是怎么运行的。可访问资源如网络和硬盘驱动在这个环境中是虚拟化的，它与你的系统息息相关，因此，你需要映射端口到外部网络，并且需要制定什么文件你想要”拷入“环境中。当然，做完之后，你在Dockerfile中按你的想法构建无论什么环境都能运行的应用程序。
+
+##### DockerFile
+创建一个空的目录，使用`cd`命令进入新目录中，创建一个名叫dockerfile的文件，拷贝复制下面的内容到文件中并且保存它。在心的dockerfile文件中写下注释与解释。
+
+    # Use an official Python runtime as a parent image
+    FROM python:2.7-slim
+
+    # Set the working directory to /app
+    WORKDIR /app
+
+    # Copy the current directory contents into the container at /app
+    ADD . /app
+
+    # Install any needed packages specified in requirements.txt
+    RUN pip install --trusted-host pypi.python.org -r requirements.txt
+
+    # Make port 80 available to the world outside this container
+    EXPOSE 80
+
+    # Define environment variable
+    ENV NAME World
+
+    # Run app.py when the container launches
+    CMD ["python", "app.py"]
+    
+    
+
+
 
 
 
