@@ -1052,4 +1052,14 @@ Dockerfile文件中定义了你环境上的容器内部是怎么运行的。可�
 
 https://docs.docker.com/get-started/images/app-in-browser.png
 
+注意：如果你在Win7上使用Docker ToolBox,请使用Docker虚机IP代替localhost。如：`http://192.168.99.100:4000/`。可以使用`docker-machine IP
+`命令查看IP地址.
+
+当然，你也可以使用curl命令行来查看相同的内容
+
+    $ curl http://localhost:4000
+
+    <h3>Hello World!</h3><b>Hostname:</b> 8fc990912a14<br/><b>Visits:</b> <i>cannot connect to Redis, counter disabled</i>
+
+
 
