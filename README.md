@@ -1033,7 +1033,7 @@ Dockerfile文件中定义了你环境上的容器内部是怎么运行的。可�
 
     docker build -t friendlyhello .
     
-你在哪儿构建镜像，是在你的机器上的本地Docker镜像仓库：
+想要知道你构建的镜像在哪吗?时时上他就在你本机的本地Docker仓库
 
     $ docker image ls
 
@@ -1045,9 +1045,11 @@ Dockerfile文件中定义了你环境上的容器内部是怎么运行的。可�
 运行应用程序，将你机器的4000端口映射到容器的公共80端口，使用-p参数
 
     docker run -p 4000:80 friendlyhello
-    
- 
+    
+你应该通过`http://0.0.0.0:80`看你Python服务的信息。那些信息来自你内部容器，容器并不知道你把80端口映射到容器的4000端口，正确的URL地址是`http://localhost:4000`。
 
+把URL地址输入到浏览器中可以在web页面上可以看到服务器的信息。
 
+https://docs.docker.com/get-started/images/app-in-browser.png
 
 
