@@ -1297,7 +1297,8 @@ Dockerfile文件中定义了你环境上的容器内部是怎么运行的。可�
 
 把URL地址输入到浏览器中可以在web页面上可以看到服务器的信息。
 
-https://docs.docker.com/get-started/images/app-in-browser.png
+图片20： 
+    ![图片20](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/20.png  "图片20")
 
 注意：如果你在Win7上使用Docker ToolBox,请使用Docker虚机IP代替localhost。如：`http://192.168.99.100:4000/`。可以使用`docker-machine IP
 `命令查看IP地址.
