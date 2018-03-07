@@ -1427,9 +1427,44 @@ Dockerfile文件中定义了你环境上的容器内部是怎么运行的。可�
 
 幸运的是，使用Docker平台定义，运行和扩展服务非常简单-只需编写一个docker-compose.yml文件即可。
 
+#### 4.编写你的第一个`docker-compose.yml`文件
 
+docker-compose.yml文件是一个YAML文件，它定义了Docker容器在生产中的行为方式。
 
+##### docker-compose.yml
 
+将此文件保存为docker-compose.yml，无论你在什么系统平台下。 确保您已将第二节中创建的镜像推送到注册表中，并通过用您的镜像替换`username/repo:tag`来更新此`.yml`文件。
+
+    version: "3"
+    services:
+      web:
+        # replace username/repo:tag with your name and image details
+        image: username/repo:tag
+        deploy:
+          replicas: 5
+          resources:
+            limits:
+              cpus: "0.1"
+              memory: 50M
+          restart_policy:
+            condition: on-failure
+        ports:
+          - "80:80"
+        networks:
+          - webnet
+    networks:
+      webnet:
+
+这个docker-compose.yml文件告诉Docker执行以下操作：
+
+1).从注册表中拉取我们在第二节中上传的镜像。
+2).运行该镜像的5个实例作为名为web的服务，限制每个实例使用最多10％的CPU（跨所有核心）和50MB的RAM。
+3).如果一个失败，立即重启容器。
+4).将主机上的端口80映射到Web的端口80。
+5).指示web容器通过称为webnet的负载平衡网络共享端口80。 （在内部，容器本身在临时端口上发布到web的端口80）。
+6).使用默认设置（这是一个负载平衡覆盖网络）定义webnet网络。
+
+#### 5.运行新的负载均衡应用程序
 
 
 
