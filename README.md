@@ -1495,7 +1495,8 @@ docker-compose.yml文件是一个YAML文件，它定义了Docker容器在生产�
 
 你可以在一个行中执行几次`curl -4 http://localhost`，然后去浏览器中输入URL点击刷新几次，效果如下
 
-
+图片21:
+    ![图片21](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/21.png  "图片21")
 
 
 
