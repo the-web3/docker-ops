@@ -823,7 +823,7 @@ DockerEE不支持Fedora平台，
 - 大多数用户通过配置docker仓库来安装docker，这样做的优点是每一次安装和更新任务都是轻松的。这也是官方比较推荐的方法。
 - 一些用户下载PRM包手动地安装docker并且升级的时候也是完全手动的。这是在没有和外界网络连接的主机上安装docker的有效方法
 
-##### 安装使用仓库
+###### 安装使用仓库
 在你在你的新主机上第一次安装docker之前，你需要配置docker仓库，以后你就可以通过仓库来安装和更新docker，
  
 ###### 配置docker仓库
@@ -844,14 +844,112 @@ DockerEE不支持Fedora平台，
 
     $ sudo dnf config-manager --set-disabled docker-ce-edge
 
-##### 安装dockerCE
-更新dnf包索引
+##### 通过命令行安装dockerCE
+1.安装最新版本的DockerCE,也可以安装指定版本的Docker
+
+    $ sudo dnf install docker-ce
+    
+如果这是您第一次从最近添加的存储库安装软件包，系统会提示您接受GPG密钥，并显示密钥的指纹。 确认指纹是否与060A 61C5 1B55 8A7F 742B 77AA C52F EB6B 621E 9F35匹配，如果是，请接受密钥。
+
+有多个Docker存储库？
+
+如果启用了多个Docker存储库，则在未指定dnf install或dnf update命令中的版本的情况下安装或更新将始终安装尽可能高的版本，这可能不适合您的稳定性需求。
+
+2.在生产系统上，您应该安装特定版本的Docker CE，而不是始终使用最新版本。 列出可用的版本。 此示例使用sort -r命令将结果按版本号排序，从最高到最低并被截断。
+
+    $ dnf list docker-ce  --showduplicates | sort -r
+    docker-ce.x86_64  17.12.0.fc26  docker-ce-stable
+
+列表的内容取决于启用了哪些存储库，并且特定于您的Fedora版本（在此示例中，由版本中的.fc26后缀指示）。 选择一个特定的版本进行安装。 第二列是版本字符串。 第三列是存储库名称，它指示软件包来自哪个存储库并且通过扩展其稳定性级别。 要安装特定版本，请将版本字符串附加到包名称并用连字符（ - ）分隔：
+
+    $ sudo dnf -y install docker-ce-<VERSION>
+
+3.启动Docker
+   
+    $ sudo systemctl start docker
+    
+4.通过运行hello-world映像验证Docker CE是否已正确安装。
+
+    $ sudo docker run hello-world
+    
+该命令下载测试图像并将其运行到容器中。 当容器运行时，它会打印一条信息消息并退出。
+
+Docker CE已安装并正在运行。 您需要使用sudo来运行Docker命令。 继续Linux postinstall以允许非特权用户运行Docker命令以及其他可选配置步骤。
+
+###### 升级DOCKER CE
+
+要升级Docker CE，请按照安装说明进行操作，选择要安装的新版本。
+
+##### 通过包安装Docker
+
+如果您无法使用Docker的存储库来安装Docker，则可以下载用于发布的.rpm文件并手动安装。 每次要升级Docker CE时，都需要下载一个新文件。
+
+1.去`https://download.docker.com/linux/fedora/`并选择您的Fedora版本。 转到`x86_64/stable/Packages/`并下载要安装的Docker版本的.rpm文件。
+注：要安装edge包，请将上述URL中的stable字改为edge。
+
+2.安装Docker CE，将下面的路径更改为您下载Docker软件包的路径。
+
+    $ sudo dnf -y install /path/to/package.rpm
+3.启动Docker
+
+    $ sudo systemctl start docker
+4.通过运行hello-world映像验证Docker CE是否已正确安装。
+
+    $ sudo docker run hello-world
+    
+该命令下载测试图像并将其运行到容器中。 当容器运行时，它会打印一条信息消息并退出。
+
+Docker CE已安装并正在运行。 您需要使用sudo来运行Docker命令。 继续执行Linux的安装后步骤，以允许非特权用户运行Docker命令以及其他可选配置步骤。
+
+###### 升级DOCKER CE
+
+要升级Docker CE，请下载较新的软件包文件并重复安装过程，使用dnf -y upgrade而不是dnf -y install，然后指向新文件。
+
+##### 使用便捷脚本进行安装
+Docker在get.docker.com和test.docker.com上提供了便捷脚本，用于快速非交互式地将Docker CE的边缘和测试版本安装到开发环境中。 这些脚本的源代码位于docker-install存储库中。 不建议在生产环境中使用这些脚本，并且在使用它们之前应了解潜在风险
+
+1.脚本需要root或sudo权限才能运行。 因此，在运行脚本之前，应仔细检查和审核脚本。
+2.这些脚本会尝试检测您的Linux发行版和版本，并为您配置您的软件包管理系统。 另外，这些脚本不允许您自定义任何安装参数。 这可能会导致不支持的配置，无论是从Docker的角度还是从您自己的组织准则和标准。
+3.这些脚本会安装包管理器的所有依赖关系和建议，而不要求确认。 这可能会安装大量的包，具体取决于主机的当前配置。
+4.该脚本不提供指定要安装哪个版本的Docker的选项，并安装在“边缘”通道中发布的最新版本。
+5.如果Docker已经使用其他机制安装在主机上，请不要使用便捷脚本。
+
+本示例使用get.docker.com上的脚本在Linux上安装Docker CE的最新版本。 要安装最新的测试版本，请改用test.docker.com。 在下面的每个命令中，将每个出现的get替换为test。
+
+    $ curl -fsSL get.docker.com -o get-docker.sh
+    $ sudo sh get-docker.sh
+
+    <output truncated>
+
+    If you would like to use Docker as a non-root user, you should now consider
+    adding your user to the "docker" group with something like:
+
+      sudo usermod -aG docker your-user
+
+    Remember to log out and back in for this to take effect!
+
+    WARNING: Adding a user to the "docker" group grants the ability to run
+             containers which can be used to obtain root privileges on the
+             docker host.
+             Refer to https://docs.docker.com/engine/security/security/#docker-daemon-attack-surface
+             for more information.
+             
+Docker CE已安装。 它在基于DEB的发行版上自动启动。 在基于RPM的分发上，您需要使用适当的systemctl或service命令手动启动它。 如消息所示，非root用户默认情况下不能运行Docker命令。
+
+###### 升级后使用便利脚本后的DOCKER
+如果您使用便捷脚本安装Docker，则应直接使用软件包管理器升级Docker。 重新运行便捷脚本没有任何优势，如果它试图重新添加已添加到主机的存储库，则会产生问题。
+
+##### 卸载Docker
+1.卸载Docker包
+
+    $ sudo dnf remove docker-ce
+
+ 2.不会自动删除主机上的图像，容器，卷或自定义配置文件。 删除所有图像，容器和卷：
  
-    $ sudo dnf makecache fast
+    $ sudo rm -rf /var/lib/docker
 
-
-
-
+您必须手动删除任何已编辑的配置文件。
+ 
 ## 第三章：Docke的使用
 本章分为三个部分，第一部分：docker的启动，第二部分:docker的使用案例学习；第三部分：docker总览。在第一大部分中共6个小节；1.适配与设置；2.容器；3.服务；4.集群；5.进程栈的应用；6.部署应用。
 
