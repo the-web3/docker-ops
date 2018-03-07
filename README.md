@@ -1466,6 +1466,47 @@ docker-compose.yml文件是一个YAML文件，它定义了Docker容器在生产�
 
 #### 5.运行新的负载均衡应用程序
 
+在此之前，我们可以使用`docker stack deploy`命令来完成首次执行
+
+    docker swarm init
+
+注意：
+关于上面这个命令，在第四节中我们将会介绍它的具体含义。如果你不执行Docker集群初始化命令，你会获得一个错误“这个节点不是集群管理节点”
+
+现在，让我们来运行它，你需要给应用程序一个名字，在这里，我们就把他命名为`getstartedlab`
+
+    docker stack deploy -c docker-compose.yml getstartedlab
+
+单个服务栈在一台主机上运行我们部署的镜像容器实例
+
+使用下面的命令为我们的每个应用程序查看服务ID号
+
+    docker service ls
+    
+查看web服务的对外输出，首先关注应用程序的名字，如果名字和案列中的显示一样，名字是`getstartedlab_web`,服务的ID、包含副本的数量、镜像名字、端口也会相应的列出来，
+
+单个容器运行在服务中被称为任务，每个任务都有唯一的ID，这个ID是数字化增长的，增长到`docker-compose.yml`文件中定义的副本数量，使用下面命令可以你的服务中的任务：
+
+    docker service ps getstartedlab_web
+
+如果你列出的是在你系统中的所有容器，任务将会上升显示，你可以通过下面命令过滤服务
+
+    docker container ls -q
+
+你可以在一个行中执行几次`curl -4 http://localhost`，然后去浏览器中输入URL点击刷新几次，效果如下
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
