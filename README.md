@@ -1524,6 +1524,87 @@ Docker执行一下就会就地地更新，不需要先杀死栈或杀死任何�
 注意：像这样编写文件用于使用Docker定义应用程序，并且可以使用Docker Cloud将其上传到云提供商，或者使用Docker Enterprise Edition选择的任何硬件或云提供商。
 
 
+### 第四节.集群
+
+#### 1.先决条件
+
+1).安装Docker版本1.13或更高版本。
+2).按照第三节的先决条件中所述获取Docker Compose。
+3).获取预装Mac平台Docker和Windows平台上的Dockers的Docker Machine，但在Linux系统上需要直接安装它。如果不是win10系统或者其他Win系统在没有Hyper-V，需要使用Docker Toolbox来装载Docker
+4).看本章中的第一节和第二节
+5)确保您已发布通过推送到注册表创建的`friendlyhello`镜像。 我们在这里使用该共享镜像。
+6).确保你的镜像作为一个部署的容器. 运行这个命令, 在您的信息中输入用户名, 仓库和标志: `docker run -p 80:80 username/repo:tag`,然后访问`http://localhost/`。
+7).方便地从第三节复制docker-compose.yml。
+
+#### 2.序言
+
+在第三节中，介绍了在第二节中编写的应用程序，并定义了它应该如何在生产环境中运行，将其转化为服务，并在此过程中将其扩展5个容器服务。
+
+在第四节中，我们会将此应用程序部署到群集上，并在多台机器上运行它。 通过将多台机器连接到称为群集的“Dockerized”群集，使多容器，多机器应用成为可能。
+
+#### 3.理解集群
+
+Swarm是一组运行Docker并加入到集群中的机器。 发生这种情况后，您将继续运行您习惯的Docker命令，但现在它们将由群集管理器在群集上执行。 群体中的机器可以是物理的或虚拟的。加入群体后，这些物理机或者虚拟机被称为节点。
+
+Swarm管理人员可以使用多种策略来运行容器，例如“最空节点”-它可以使用容器填充使用率最低的机器。 或者“全局”，它确保每台机器只获取指定容器的一个实例。指示swarm管理人员在Compose文件中使用这些策略，就像已经使用的策略一样。
+
+集群管理者是集群中唯一可以执行命令的机器，或者授权其他机器作为工作者加入群体。 工人只是在那里提供能力，并没有权力告诉任何其他机器可以做什么和不可以做什么。
+
+到目前为止，您已经在本地机器上以单主机模式使用Docker。 但是Docker也可以切换到集群模式，这就是使用集群的原因。 立即启用集群模式使当前的机器成为群管理器。 从此，Docker将运行在您管理的集群上执行命令，而不仅仅是在当前机器上执行。
+
+#### 4.配置集群
+
+一个集群由多个节点组成，可以是物理机器或虚拟机器。 基本概念很简单：运行`docker swarm init`来启用swarm模式，并让你的当前机器成为`swarm manager`，然后在其他机器上运行`docker swarm join`，让它们作为工作者加入`swarm`。 选择下面的选项卡，看看它是如何在各种情况下发挥作用的。 我们使用虚拟机快速创建一个双机群集，并将其转变为群集。
+
+##### 创建一个集群
+
+###### VMS在您的本地机器上(MAC, LINUX, WIN7和WIN8)
+
+需要一个可以创建虚拟机（VM）的虚拟机管理程序，因此请为您的计算机的操作系统安装甲骨文的VirtualBox。关于VirtualBox的安装请查询相关资料，这里不做介绍
+
+注意：如果在安装了Hyper-V的Windows系统（如Windows 10）上，则无需安装VirtualBox，而应该使用Hyper-V。 通过单击上面的Hyper-V选项卡查看Hyper-V系统的说明。 如果你使用的是Docker Toolbox，你应该已经安装了VirtualBox作为它的一部分。
+
+现在，使用docker-machine创建一对VMS，使用VirtualBox驱动
+
+    docker-machine create --driver virtualbox myvm1
+    docker-machine create --driver virtualbox myvm2
+
+###### 列出VMS和获取他们的IP地址
+
+现在创建了两个VMS，名字叫做myvm1和myvm2
+
+使用下面这个命令列出机器和取得他们的IP地址
+
+    docker-machine ls
+
+下面是命令行输出的结果：
+
+    $ docker-machine ls
+    NAME    ACTIVE   DRIVER       STATE     URL                         SWARM   DOCKER        ERRORS
+    myvm1   -        virtualbox   Running   tcp://192.168.99.100:2376           v17.06.2-ce   
+    myvm2   -        virtualbox   Running   tcp://192.168.99.101:2376           v17.06.2-ce   
+
+###### 初始化集群和添加节点
+
+第一台机器作为管理员，执行管理命令并认证其他节点加入集群，第二台机器是节点。
+
+您可以使用docker-machine ssh将命令发送到您的VM。 指示myvm1成为一个拥有`docker swarm init`的`warm manager`并查看是否有这样的输出：
+
+    $ docker-machine ssh myvm1 "docker swarm init --advertise-addr <myvm1 ip>"
+    Swarm initialized: current node <node ID> is now a manager.
+
+    To add a worker to this swarm, run the following command:
+
+      docker swarm join \
+      --token <token> \
+      <myvm ip>:<port>
+
+    To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
+
+
+
+
+
 
 
 
