@@ -1601,6 +1601,16 @@ Swarm管理人员可以使用多种策略来运行容器，例如“最空节点
 
     To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
 
+ * 端口2377和2376
+
+ 总是在端口2377(集群管理端口)上运行 `docker swarm init` 和 `docker swarm join` 命令, 或根本不运行端口，并让其采用默认值.
+ 通过命令`docker-machine ls`获取到包括端口2376机器的IP地址，2376是Docker的守护端口。不要使用这个端口，否则你会遇到一些经验性错误
+
+ * 使用SSH有问题吗？尝试使用 -native-ssh标志
+
+ 如果由于某些原因，您无法向集群管理机器发送命令，Docker Machine可以让您使用自己系统的SSH。 只需在调用ssh命令时指定--native-ssh标志：
+
+    docker-machine --native-ssh ssh myvm1 ...
 
 
 
