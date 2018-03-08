@@ -1498,6 +1498,33 @@ docker-compose.yml文件是一个YAML文件，它定义了Docker容器在生产�
 图片21:
     ![图片21](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/21.png  "图片21")
 
+无论哪种方式，容器ID都会发生变化，从而显示负载平衡; 在每个请求中，以循环方式选择5个任务中的一个来响应。 容器ID与前一个命令（docker container ls -q）的输出相匹配。
+
+#### 4.扩展应用程序
+
+可以通过在docker-compose.yml中改变副本的值来扩展应用程序，保存改变，重新运行Docker栈部署命令：
+
+    docker stack deploy -c docker-compose.yml getstartedlab
+
+Docker执行一下就会就地地更新，不需要先杀死栈或杀死任何容器。
+
+现在，重新运行`docker container ls -q`查看部署重配置情况。如果你扩展了副本，则会启动更多任务，因此还会启动更多容器。
+
+##### 删除应用程序和集群
+
+使用这个`docker stack rm`命令来删除应用程序:
+
+    docker stack rm getstartedlab
+删除集群
+
+    docker swarm leave --force
+ 
+用Docker建设并扩展您的应用程序非常简单。 您已经朝着学习如何在生产中运行容器迈出了一大步。 接下来，您将学习如何将这个应用程序作为Docker机器群集上的真正群体运行。
+
+注意：像这样编写文件用于使用Docker定义应用程序，并且可以使用Docker Cloud将其上传到云提供商，或者使用Docker Enterprise Edition选择的任何硬件或云提供商。
+
+
+
 
 
 
