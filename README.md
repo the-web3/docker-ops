@@ -1648,8 +1648,15 @@ Swarm管理人员可以使用多种策略来运行容器，例如“最空节点
 
 #### 5.在集群上部署你的应用
 
+困难的部分已经结束，现在仅仅需要重复在第三节中过程部署一个新的集群，只要记住有一个类似myvm1这样的集群管理者执行Docker命令；工作节点仅仅是为了容纳
 
+##### 配置一个docker-machine shell脚本来管理swarm
 
+到目前为止，您已经在Docker-machine ssh中将Docker命令包装了与虚拟机交互。 另一种选择是运行`docker-machine env <machine>`来获取并运行一个命令，该命令将当前shell配置为与VM上的Docker守护进程进行通信。 此方法对下一步更好，因为它允许您使用本地`docker-compose.yml`文件“远程”部署应用程序，而无需将其复制到任何位置。
+
+键入`docker-machine env myvm1`，然后复制粘贴并运行作为输出最后一行提供的命令，以将shell配置swarm管理机器与myvm1交互。
+
+配置shell的命令根据你是Mac，Linux还是Windows而有所不同，因此下面的分情况来介绍。
 
 
 
