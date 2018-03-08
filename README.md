@@ -1568,6 +1568,21 @@ Swarm管理人员可以使用多种策略来运行容器，例如“最空节点
 
     docker-machine create --driver virtualbox myvm1
     docker-machine create --driver virtualbox myvm2
+    
+    
+###### VMS在本地机器(WIN10)
+
+首先，快速为您的虚拟机（VM）创建一个虚拟交换机以便共享，以便它们可以相互连接。
+
+1).启动Hyper-V管理器
+2).点击右侧菜单中的虚拟交换管理器
+3).单击创建类型为External的虚拟交换机
+4).将它命名为myswitch，然后选中复选框以共享主机的活动网络适配器
+5).现在，使用我们的节点管理工具docker-machine创建几个虚拟机：
+
+    docker-machine create -d hyperv --hyperv-virtual-switch "myswitch" myvm1
+    docker-machine create -d hyperv --hyperv-virtual-switch "myswitch" myvm2
+
 
 ###### 列出VMS和获取他们的IP地址
 
@@ -1612,7 +1627,26 @@ Swarm管理人员可以使用多种策略来运行容器，例如“最空节点
 
     docker-machine --native-ssh ssh myvm1 ...
 
+如您所见，对`docker swarm init`的响应包含一个预配置的`docker swarm join`命令，您可以在要添加的任何节点上运行该命令。 复制这个命令，并通过`docker-machine ssh`将它发送到myvm2，让myvm2作为一个工作节点的形式加入你的集群：
 
+    $ docker-machine ssh myvm2 "docker swarm join \
+    --token <token> \
+    <ip>:2377"
+
+恭喜，你已经创建了你的第一个群！
+
+在管理器上运行docker节点ls以查看此群中的节点：
+
+    $ docker-machine ssh myvm1 "docker node ls"
+    ID                            HOSTNAME            STATUS              AVAILABILITY        MANAGER STATUS
+    brtu9urxwfd5j0zrmkubhpkbd     myvm2               Ready               Active
+    rihwohkh3ph38fhillhhb84sk *   myvm1               Ready               Active              Leader
+
+ * 离开集群
+ 
+ 如果你想结束集群，你可以使用`docker swarm leave`来分离他们
+
+#### 5.在集群上部署你的应用
 
 
 
