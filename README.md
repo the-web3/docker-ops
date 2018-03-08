@@ -1658,13 +1658,58 @@ Swarm管理人员可以使用多种策略来运行容器，例如“最空节点
 
 配置shell的命令根据你是Mac，Linux还是Windows而有所不同，因此下面的分情况来介绍。
 
+* Mac和Linux平台
 
+###### MAC或LINUX上的DOCKER MACHINE SHELL环境
 
+运行`docker-machine env myvm1`以获取命令来配置shell以与myvm1进行通信。
 
+    $ docker-machine env myvm1
+    export DOCKER_TLS_VERIFY="1"
+    export DOCKER_HOST="tcp://192.168.99.100:2376"
+    export DOCKER_CERT_PATH="/Users/sam/.docker/machine/machines/myvm1"
+    export DOCKER_MACHINE_NAME="myvm1"
+    # Run this command to configure your shell:
+    # eval $(docker-machine env myvm1)
 
+运行给定的命令来配置你的shell与myvm1进行通信。
 
+    eval $(docker-machine env myvm1)
 
+运行`docker-machine ls`以验证myvm1现在是活动机器，如旁边的星号所示。
 
+    $ docker-machine ls
+    NAME    ACTIVE   DRIVER       STATE     URL                         SWARM   DOCKER        ERRORS
+    myvm1   *        virtualbox   Running   tcp://192.168.99.100:2376           v17.06.2-ce   
+    myvm2   -        virtualbox   Running   tcp://192.168.99.101:2376           v17.06.2-ce   
+
+* Windows平台
+
+###### WINDOWS上的DOCKER MACHINE SHELL环境
+
+运行`docker-machine env myvm1`以获取命令来配置shell以与myvm1进行通信。
+
+    PS C:\Users\sam\sandbox\get-started> docker-machine env myvm1
+    $Env:DOCKER_TLS_VERIFY = "1"
+    $Env:DOCKER_HOST = "tcp://192.168.203.207:2376"
+    $Env:DOCKER_CERT_PATH = "C:\Users\sam\.docker\machine\machines\myvm1"
+    $Env:DOCKER_MACHINE_NAME = "myvm1"
+    $Env:COMPOSE_CONVERT_WINDOWS_PATHS = "true"
+    # Run this command to configure your shell:
+    # & "C:\Program Files\Docker\Docker\Resources\bin\docker-machine.exe" env myvm1 | Invoke-Expression
+
+运行给定的命令来配置你的shell与myvm1进行通信。
+
+    & "C:\Program Files\Docker\Docker\Resources\bin\docker-machine.exe" env myvm1 | Invoke-Expression
+
+运行`docker-machine ls`以验证myvm1是否为活动机器，如旁边的星号所示。
+
+    PS C:PATH> docker-machine ls
+    NAME    ACTIVE   DRIVER   STATE     URL                          SWARM   DOCKER        ERRORS
+    myvm1   *        hyperv   Running   tcp://192.168.203.207:2376           v17.06.2-ce
+    myvm2   -        hyperv   Running   tcp://192.168.200.181:2376           v17.06.2-ce
+
+##### 在集群管理器上部署应用程序
 
 
 
