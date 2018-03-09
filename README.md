@@ -1755,8 +1755,81 @@ Swarm管理人员可以使用多种策略来运行容器，例如“最空节点
 
 网络的创建在负载均衡之间是共享的。运行`docker-machine ls`来获取VMs的IP地址，并且通过浏览器来访问他们，点击刷新（或者仅仅curl他们）
 
+图片22:
+    ![图片22](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/22.png  "图片22")
+
+有五个可能的容器ID全部随机循环，展示负载平衡。
+
+两个IP地址工作的原因是群中的节点参与入口路由网格。 这可以确保部署在群集中某个端口的服务始终将该端口保留给自己，而不管实际运行容器的节点是什么。
+
+* 如果遇到连接问题，下面方法可能帮助到你
+
+请记住，要使用群集中的入口网络，在启用群集模式之前，需要在群集节点之间打开以下端口：
+
+1).用于容器网络发现的端口7946 TCP/UDP
+2).用于入口网络的端口4789UDP
+
+#### 6.迭代和扩展你的应用程序
+
+1).从这里你可以完成你在第二节和第三节中学到的一切。
+2).通过更改`docker-compose.yml`文件来扩展应用程序。
+3).通过编辑代码更改应用程序行为，然后重新构建并推送新图像。（要做到这一点，请按照之前用于构建应用程序和发布图像的相同步骤）。
+4).无论哪种情况，只需再次运行`docker stack deploy`来部署这些更改。
+5).可以使用您在myvm2上使用的相同`docker swarm join`命令将任何物理或虚拟机器加入此群集，并将容量添加到群集中。之后只需运行`docker stack`部署，并且您的应用程序可以利用新资源。
+
+#### 7.清除和重置
+
+##### 栈和集群
+
+使用`docker stack rm`命令来删除栈，例如：
+
+    docker stack rm getstartedlab
+
+保持集群或删除它？
+
+在稍后的某个时间点，如果您想要使用管理员的权限使用命令`docker-machine ssh myvm2`“`docker swarm leave`”或在在工作节点上使用`docker-machine ssh myvm1``“docker swarm leave --force”`删除此集群。 
+
+##### 取消设置docker-machine shell变量设置
+
+您可以使用以下命令取消当前shell中的docker-machine环境变量：
+    
+    eval $(docker-machine env -u)
+
+##### 重启Docker机器
+
+如果关不主机，Docker机器会停止运行，需要运行`docker-machine ls`命令来检查机器的状态
+
+    $ docker-machine ls
+    NAME    ACTIVE   DRIVER       STATE     URL   SWARM   DOCKER    ERRORS
+    myvm1   -        virtualbox   Stopped                 Unknown
+    myvm2   -        virtualbox   Stopped                 Unknown
+
+要重新启动已停止的计算机，运行：
+
+    docker-machine start <machine-name>
+
+例如：
+
+    $ docker-machine start myvm1
+    Starting "myvm1"...
+    (myvm1) Check network to re-create if needed...
+    (myvm1) Waiting for an IP...
+    Machine "myvm1" was started.
+    Waiting for SSH to be available...
+    Detecting the provisioner...
+    Started machines may have new IP addresses. You may need to re-run the `docker-machine env` command.
+
+    $ docker-machine start myvm2
+    Starting "myvm2"...
+    (myvm2) Check network to re-create if needed...
+    (myvm2) Waiting for an IP...
+    Machine "myvm2" was started.
+    Waiting for SSH to be available...
+    Detecting the provisioner...
+    Started machines may have new IP addresses. You may need to re-run the `docker-machine env` command.
 
 
+### 第五节.堆栈
 
 
 
