@@ -1749,6 +1749,14 @@ Swarm管理人员可以使用多种策略来运行容器，例如“最空节点
 
 本教程演示了`docker-machine ssh`和`docker-machine env`，因为这些都可以通过`docker-machine CLI`在所有平台上使用。
 
+##### 访问集群
+
+你可以通过IP地址进入`myvm1`或者`myvm2`
+
+网络的创建在负载均衡之间是共享的。运行`docker-machine ls`来获取VMs的IP地址，并且通过浏览器来访问他们，点击刷新（或者仅仅curl他们）
+
+
+
 
 
 
