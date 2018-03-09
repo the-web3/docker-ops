@@ -1711,6 +1711,45 @@ Swarm管理人员可以使用多种策略来运行容器，例如“最空节点
 
 ##### 在集群管理器上部署应用程序
 
+现在你已经拥有了myvm1，你可以使用它的权限作为集群管理者来部署你的app，方法是使用你在myvm1中使用的相同的`docker stack deploy`命令和`docker-compose.yml`的本地副本。 需要几秒钟才能完成，部署需要一段时间才能完成。 在集群管理器上使用`docker service ps <service_name>`命令验证所有服务是否已被重新部署。
+
+你可以通过`docker-machine`shell脚本配置连接到`myvm1`,并且你可以通过本地主机进入文件，在此之前确信你已经在第三节中创建`docker-compose.yml`同级目录下。
+
+就像之前一样，运行下面的命令将你的应用程序部署到myvm1上
+
+    docker stack deploy -c docker-compose.yml getstartedlab
+到目前为止，你的应用程序已经部署到集群上了
+
+注意：如果你的镜像存储在私有仓库而不是存储在Docker Hub上,你需要使用`docker login <your-registry>`来登录到仓库，并且要在上面的命令后面添加`--with-registry-auth` 标志来部署应用程序
+
+    docker login registry.example.com
+    docker stack deploy --with-registry-auth -c docker-compose.yml getstartedlab
+
+这使用加密的WAL日志将登录令牌从本地客户端传递到部署服务的群集节点。 有了这些信息，这些节点就能够登录到仓库并提取镜像了。
+
+
+现在你可以使用第三节中相同的Docker命令。只有这次注意到服务（和相关容器）已经在`myvm1`和`myvm2`之间分配了。
+
+    $ docker stack ps getstartedlab
+
+    ID            NAME                  IMAGE                   NODE   DESIRED STATE
+    jq2g3qp8nzwx  getstartedlab_web.1   john/get-started:part2  myvm1  Running
+    88wgshobzoxl  getstartedlab_web.2   john/get-started:part2  myvm2  Running
+    vbb1qbkb0o2z  getstartedlab_web.3   john/get-started:part2  myvm2  Running
+    ghii74p9budx  getstartedlab_web.4   john/get-started:part2  myvm1  Running
+    0prmarhavs87  getstartedlab_web.5   john/get-started:part2  myvm2  Running
+
+* 使用`docker-machine`和`docker-machine ssh`连接到VMs
+
+1).要将`shell`设置为与`myvm2`等其他机器通信，只需在相同或不同`shell`中重新运行`docker-machine env`，然后运行给定命令指向`myvm2`。这总是特定于当前的shell。如果您更改为未配置的shell或打开一个新的shell，则需要重新运行这些命令。使用`docker-machine ls`列出机器，查看它们处于什么状态，获取IP地址，并找出连接到哪一个（如果有的话）。要了解更多信息，请参阅`Docker Machine`入门主题。
+
+2).或者，您可以以`docker-machine ssh <machine>“<command>”`的形式封装Docker命令，该命令可直接登录到VM，但不会立即访问本地主机上的文件。
+
+3).在Mac和Linux上，您可以使用`docker-machine scp <file> <machine>：〜`在计算机之间复制文件，但Windows用户需要像Git Bash这样的Linux终端模拟器才能运行。
+
+本教程演示了`docker-machine ssh`和`docker-machine env`，因为这些都可以通过`docker-machine CLI`在所有平台上使用。
+
+
 
 
 
