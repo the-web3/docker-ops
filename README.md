@@ -12,7 +12,7 @@ docker将软件打包成标准化的单元用于开发，发行和部署，容�
 
 ## 第二章：不同的平台上安装Docker与使用
 ### 第一节:Mac平台上Docker安装与使用
- Docker是一个跨平台的轻量级虚拟机，可移植性非常高，一次部署，终生可用。Docker可以在Linux,Windows,MacOS等平台上安装使用。我们都知道Linux有很多不同        的版本，例如Ubuntu，AIX，CentOS，Debian，Fedora，Oracle Linux，Red Hat Enterprise Linux，openSUSE and SUSE Linux Enterprise等。尽管Linux的版本很多，但是我们的Docker都可以在他们在面运行。你也可以使用Docker云来自动准备和管理你的云实例。
+ Docker是一个跨平台的轻量级虚拟机，可移植性非常高，一次部署，终生可用。Docker可以在Linux,Windows,MacOS等平台上安装使用。我们都知道Linux有很多不同的版本，例如Ubuntu，AIX，CentOS，Debian，Fedora，Oracle Linux，Red Hat Enterprise Linux，openSUSE and SUSE Linux Enterprise等。尽管Linux的版本很多，但是我们的Docker都可以在他们在面运行。你也可以使用Docker云来自动准备和管理你的云实例。
 #### 1.在Mac系统上安转Docker
 Docker的Mac系统上的安装包中包含了你在Mac上运行Docker的所有依赖的东西，下面这个主题是描述在Mac系统上预安装需要考虑的一些问题和怎样在Mac系统上安装  Docker。
 _你的Mac本上是否已经安装了Docker,如果已经安装了Docker，你可以直接去启动Docker，如果你已经掌握了在Mac上使用Docker，那么你可以直接跳过整个Mac上的Docker的安装和运行部分。_
@@ -1842,4 +1842,85 @@ Swarm管理人员可以使用多种策略来运行容器，例如“最空节点
 7).让你在第4节创建的集群运行并处于就绪状态。运行`docker-machine ssh myvm1“docker node ls”`来验证这一点。如果集群已启动，则两个节点都会报告就绪状态。如果没有，请按照设置集群中的说明重新初始化集群并加入工作节点。
 
 #### 2.概述
+
+在第四节中，介绍了如何设置一个集群，这是一群运行Docker的机器，并为其部署了一个应用程序，其中容器在多台机器上运行。
+
+在第五节中，将介绍分布式应用程序层次结构的顶层：堆栈。 堆栈是一组相互关联的服务，它们可以共享依赖关系，并且可以进行协调和缩放。单个堆栈能够定义和协调整个应用程序的功能（尽管非常复杂的应用程序可能需要使用多个堆栈）。
+
+一些好消息是，从第三节开始，创建Compose文件并使用`docker stack deploy`命令，从技术上讲，咱们一直在使用堆栈。 但是，这是在单个主机上运行的单个服务堆栈，通常不会发生在生产环境中。在这里，你可以把你学到的东西，使多个服务相互关联，并在多台机器上运行它们。
+
+做得很好，这就是你的主场！
+
+#### 3.添加一个新服务并且重新部署
+
+将服务添加到我们的docker-compose.yml文件很容易。首先，我们添加一个免费的可视化工具，让我们看看我们的集群如何调度容器。
+
+1).在编辑器中打开`docker-compose.yml`使用下面的内容代替`docker-compose.yml`文件中的内容。确保用`username/repo:tag`来替代你镜像详细描述
+
+    version: "3"
+    services:
+      web:
+        # replace username/repo:tag with your name and image details
+        image: username/repo:tag
+        deploy:
+          replicas: 5
+          restart_policy:
+            condition: on-failure
+          resources:
+            limits:
+              cpus: "0.1"
+              memory: 50M
+        ports:
+          - "80:80"
+        networks:
+          - webnet
+      visualizer:
+        image: dockersamples/visualizer:stable
+        ports:
+          - "8080:8080"
+        volumes:
+          - "/var/run/docker.sock:/var/run/docker.sock"
+        deploy:
+          placement:
+            constraints: [node.role == manager]
+        networks:
+          - webnet
+    networks:
+      webnet:
+
+这里新增的唯一东西就是peer服务web化，名为可视化器。 这里注意两件新事物：一个数据卷键，让可视化工具访问Docker的主机套接字文件和一个放置键，确保这项服务只能在群集管理器上运行 - 从不是在工作节点上运行。 这是因为容器是由Docker创建的一个开源项目构建的，它在一个图表中显示了集群上运行的Docker服务。
+
+我们稍后会详细讨论放置约束和数据卷。
+
+2).确保shell配置能与myvm1进行通信（在这里有完整的例子）。
+
+运行`docker-machine ls`列出机器并确保您已连接到`myvm1`。
+
+如果需要，重新运行`docker-machine env myvm1`，然后运行给定的命令来配置shell。
+
+在Mac和Linux上的命令
+
+    eval $(docker-machine env myvm1)
+在Windows上的命令
+    
+    & "C:\Program Files\Docker\Docker\Resources\bin\docker-machine.exe" env myvm1 | Invoke-Expression
+3).重新在管理节点上运行`docker stack deploy`，并更新需要更新的任何服务
+
+    $ docker stack deploy -c docker-compose.yml getstartedlab
+    Updating service getstartedlab_web (id: angi1bf5e4to03qu9f93trnxm)
+    Creating service getstartedlab_visualizer (id: l9mnwkeq2jiononb5ihz9u7a4)
+    
+4).查看可视化器
+
+在Compose文件中看到，可视化器在端口8080上运行。通过运行`docker-machine ls`来获取您的其中一个节点的IP地址。 转到8080端口的IP地址，您可以看到可视化器正在运行：
+
+
+
+
+
+
+
+
+
+
 
