@@ -1917,8 +1917,7 @@ Swarm管理人员可以使用多种策略来运行容器，例如“最空节点
 图片23:
     ![图片23](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/23.png  "图片23")
 
-
-
+可视化器的单个副本按照您的预期在管理器上运行，并且网络的5个实例遍布整个集群。 您可以通过运行`docker stack ps <stack>`来确认此可视化：
 
 
 
