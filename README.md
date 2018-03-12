@@ -1914,7 +1914,8 @@ Swarm管理人员可以使用多种策略来运行容器，例如“最空节点
 
 在Compose文件中看到，可视化器在端口8080上运行。通过运行`docker-machine ls`来获取您的其中一个节点的IP地址。 转到8080端口的IP地址，您可以看到可视化器正在运行：
 
-
+图片23:
+    ![图片23](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/23.png  "图片23")
 
 
 
