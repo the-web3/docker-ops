@@ -1919,6 +1919,102 @@ Swarm管理人员可以使用多种策略来运行容器，例如“最空节点
 
 可视化器的单个副本按照您的预期在管理器上运行，并且网络的5个实例遍布整个集群。 您可以通过运行`docker stack ps <stack>`来确认此可视化：
 
+    docker stack ps getstartedlab
+
+可视化器是一包含在堆栈中不依赖其他的任何东西可以运行运用程序的独立的服务。现在你也可以创建一个有依赖的服务，如：提供一个可视化容器的Redis服务
+
+### 第五节.持久化数据
+
+让我们通过工作流的形式将一条或者更多的应用程序的数据存储到Redis中。
+
+1.保存一个最后能够添加Redis服务的新的`docker-compose.yml`文件。确保在镜像描述栏中使用你自己的`username/repo:tag`来替代。
+
+    version: "3"
+    services:
+      web:
+        image: username/repo:tag   #此处请使用你自己的用户名、仓库名和tag标志来替代
+        deploy:
+          replicas: 5
+          restart_policy:
+            condition: on-failure
+          resources:
+            limits:
+              cpus: "0.1"
+              memory: 50M
+        ports:
+          - "80:80"
+        networks:
+          - webnet
+      visualizer:
+        image: dockersamples/visualizer:stable
+        ports:
+          - "8080:8080"
+        volumes:
+          - "/var/run/docker.sock:/var/run/docker.sock"
+        deploy:
+          placement:
+            constraints: [node.role == manager]
+        networks:
+          - webnet
+      redis:
+        image: redis
+        ports:
+          - "6379:6379"
+        volumes:
+          - "/home/docker/data:/data"
+        deploy:
+          placement:
+            constraints: [node.role == manager]
+        command: redis-server --appendonly yes
+        networks:
+          - webnet
+    networks:
+      webnet:
+
+在Docker库中有一个Redis官方镜像并且该镜像已经被授权为简短的名字-redis,因此如果拉取官方镜像，这里不需要`username/repo`项。Redis的默认端口是6379，已经通过Redis预配置并且映射到主机。在这里的我的Compose文件，我们假设他在广域网中-世界上任何地方都可以访问。这样你就可以选择使用你的任意节点的IP进入Redis桌面管理，并且管理你的Redis实例
+
+最重要的是，在Redis指定的持久化数据的这个栈之间的部署有两件重要的事
+
+* Redis总是运行在管理节点上，因此总是使用相同的文件系统
+* 在容器内部主机文件系统中，Redis进入任意Redis存储数据的目录，都要使用 /data的方式进入
+
+这样，对于你的Redis数据创建了一个“可信任的资源”在你的主机物理文件系统中。不这样的话，在容器的内部Redis将会存储它的数据在/data目录下，这样如果容器重新部署数据将会被销毁。
+
+信任资源的两个组件
+
+* 往Redis服务上面放置是受限制的，确保你总是使用相同的主机
+* 你创建的数据卷让我们通过使用`./data`方式进入(在主机上)或者`/data`（在Redis容器内部）.当容器运行的时候，文件被存储`./data`在指定主机持久化、连续化
+
+准备好使用stack部署你的新的Redis
+
+2.在管理节点上创建一个`./data`目录
+
+    docker-machine ssh myvm1 "mkdir ./data"
+
+3.确保你的shell配置能够与`myvm1`相互通信（这儿有完整的例子）
+
+* 执行`docker-machine ls`命令列出Docker虚机，并且确保你已经来接到`myvm1`，这是通过星号来标识的
+* 如果有必要，重新执行`docker-machine env myvm1`命令，然后运行配置shell的命令
+
+在Mac和Linux平台，命令如下
+
+    eval $(docker-machine env myvm1)
+
+在Windows平台，命令如下
+
+    & "C:\Program Files\Docker\Docker\Resources\bin\docker-machine.exe" env myvm1 | Invoke-Expression
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
