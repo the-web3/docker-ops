@@ -2018,13 +2018,13 @@ Swarm管理人员可以使用多种策略来运行容器，例如“最空节点
 
 6.检测你的一个节点上的web页面，如`http://192.168.99.101`,然后查看一下你的可视化器的结果，现在是不是活着并且向Redis里面存储数据
 
-图片23:
-    ![图片23](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/23.png  "图片23")
+图片24:
+    ![图片24](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/24.png  "图片24")
 
 当然，通过节点的IP地址检测两个节点中的任意一个8080端口的可视化器，并注意查看伴随着Redis服务运行的可视化器服务
 
-图片24:
-    ![图片24](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/24.png  "图片24")
+图片25:
+    ![图片25](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/25.png  "图片25")
 
 ## 
 
