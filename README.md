@@ -2386,6 +2386,34 @@ Docker引擎将名称空间，控制组和UnionFS组合成一个名为容器格�
 
 ## 第五章：在Docker上开发你的应用程序
 
+### 第一节.应用程序开发概述
+
+这一页罗列出了使用Docker开发应用程序的资源
+
+#### 1.在Docker上开发一个新的应用程序
+
+如果你仅仅基于Docker开发一个新的分支的应用程序，检查这些资源，理解一些最常见的模式，这样你能从Docker获得更多的利益。
+
+* 学习通过Dockerfile文件来构建一个镜像
+* 使用多级构建的方式来保证你的镜像不要太臃肿
+* 使用数据卷或者挂载的方式开管理应用程序
+* 把应用程序扩展为集群服务
+* 使用compose文件来定义你的应用程序栈
+* 普通应用程序开发最好的例子
+
+#### 2.学习指定语言基于Docker来开发应用程序
+
+* Java开发者学习使用Docker开发应用程序链接 `https://github.com/docker/labs/tree/master/developer-tools/java/`
+* 基于node.js来开发Docker应用程序链接 `https://github.com/docker/labs/tree/master/developer-tools/nodejs/porting`
+* 基于Ruby来开发应用程序的链接 `https://github.com/docker/labs/tree/master/developer-tools/ruby`
+* .Net的链接 `https://docs.docker.com/engine/examples/dotnetcore/`
+*  ASP.NET的链接 `https://docs.docker.com/compose/aspnet-mssql-compose/`
+
+#### 3.使用SDK或者API来开发
+
+当你通过使用Docker写Dockerfile文件或者compose文件开发应用程序感到特别顺手的时候，这样的话提升一个级别，你可以使用docker引擎SDK通过Go语言或者Python语言直接调用Python的Api进行开发。
+
+### 第二节.Docker开发最佳实践
 
 
 
