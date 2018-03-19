@@ -2162,3 +2162,79 @@ Swarm管理人员可以使用多种策略来运行容器，例如“最空节点
 |     web    |      HTTP    |         TCP       |          80          |
 | visualizer |   	HTTP	|         TCP	    |         8080         |
 |   redis	 |      TCP	    |         TCP	    |         6379         |
+
+这样做的方法因您的云提供商而异。
+
+##### 使用亚马逊来做一个案例
+
+1.登录AWS控制台，转至EC2控制板，然后单击进入运行实例以查看节点。
+
+2.在左侧菜单中，转到网络和安全>安全组。
+
+请参阅getstartedlab-Manager- <xxx>，getstartedlab-Nodes- <xxx>和getstartedlab-SwarmWide- <xxx>的与swarm相关的安全组。
+
+3.为群体选择“节点”安全组。 组名是这样的：getstartedlab-NodeVpcSG-9HV9SMHDZT8C。
+
+4.为`Web`，`visualizer`和`Redis`服务添加入站规则，为每个服务设置类型，协议和端口（如上表所示），然后单击保存以应用规则。
+
+
+提示：保存新规则时，会为IPv4和IPv6样式地址自动创建HTTP和TCP端口。
+
+图片28:
+    ![图片28](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/28.png  "图片28")
+
+5.转到运行实例列表，获取其中一名工作人员的公共DNS名称，并将其粘贴到Web浏览器的地址栏中。
+
+图片29:
+    ![图片29](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/29.png  "图片29")
+
+就像本教程的前几部分一样，Hello World应用程序显示在端口80上，而Visualizer显示在端口8080上。
+
+图片30:
+    ![图片30](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/30.png  "图片30")
+
+图片31:
+    ![图片31](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/31.png  "图片31")
+    
+    
+##### 迭代与清除
+
+从这里你可以完成你在教程前面部分学到的所有知识。
+
+通过更改docker-compose.yml文件来扩展应用程序，并使用`docker stack deploy`命令即时重新部署应用程序。
+
+通过编辑代码更改应用程序行为，然后重新构建并推送新图像。(要做到这一点，请按照之前用于构建应用程序和发布图像的相同步骤)。
+
+您可以使用`docker stack rm`拆卸堆栈。 例如：
+
+    docker stack rm getstartedlab
+
+与您在本地Docker机器虚拟机上运行集群的场景不同，不管您是否关闭本地主机，您的集群和部署在其上的所有应用都将继续在云服务器上运行。
+
+#### 2).DockerEE（云提供者）
+
+Docker Enterprise Edition的客户运行一个稳定的，商业支持的Docker Engine版本，作为附加组件，他们获得了一流管理软件Docker Datacenter。 您可以使用通用控制面板通过UI管理应用程序的各个方面，使用Docker Trusted Registry运行私人图像注册表，与LDAP提供商集成，使用Docker Content Trust签署制作镜像以及许多其他功能。
+
+坏消息是：拥有官方Docker Enterprise版本的唯一云提供商是Amazon Web Services和Microsoft Azure。
+
+好消息是：有一个单击模板可以在这些提供程序的每一个上快速部署Docker Enterprise：
+
+* 亚马逊平台的DockerEE说明
+    
+    https://store.docker.com/editions/enterprise/docker-ee-aws?tab=description
+    
+* Azure平台的DockerEE
+
+    https://store.docker.com/editions/enterprise/docker-ee-azure?tab=description
+    
+一旦你完成设置并且Datacenter正在运行，你可以直接在UI中部署你的Compose文件。
+
+图片32:
+    ![图片32](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/32.png  "图片32")
+    
+之后，您可以看到它正在运行，并且可以更改您选择的应用程序的任何方面，甚至可以编辑Compose文件本身。
+
+图片33:
+    ![图片33](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/33.png  "图片33")
+    
+    
