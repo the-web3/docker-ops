@@ -1923,7 +1923,7 @@ Swarm管理人员可以使用多种策略来运行容器，例如“最空节点
 
 可视化器是一包含在堆栈中不依赖其他的任何东西可以运行运用程序的独立的服务。现在你也可以创建一个有依赖的服务，如：提供一个可视化容器的Redis服务
 
-### 第五节.持久化数据
+#### 4.持久化数据
 
 让我们通过工作流的形式将一条或者更多的应用程序的数据存储到Redis中。
 
@@ -2026,9 +2026,67 @@ Swarm管理人员可以使用多种策略来运行容器，例如“最空节点
 图片25:
     ![图片25](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/25.png  "图片25")
 
-## 
+### 第六节.部署你的应用程序
 
+#### 1.必备条件
 
+1).安装Docker
+2).满足第三节中获取`Docker Compose`的描述，第四节中获取`Docker Machine`的描述
+3).阅读过第一节定向部分、学习了第二节中怎么创建容器
+4).确保你已经将`friendlyhello`镜像创建并发布，并且将其推送到仓库，在这儿我们能够使用共享镜像
+5).确保你的镜像做为一个部署容器能够工作，运行这个命令`docker run -p 80:80 username/repo:tag`,把命令中的username和repo:tag替换成你自己的，然后访问`http://localhost/`
+6).有一个在第五节中手动创建的`docker-compose.yml`的版本
+
+#### 2.简介
+
+你一直在为整个教程编辑相同的Compose文件。 那么，好消息，该撰写文件在生产环境中的效果与在您的计算机上开发环境效果是相同。 在这里，我们通过一些选项来运行Dockerized应用程序。
+
+#### 3.选择一种方式
+
+#### 1).DockerCE（云提供者）
+
+如果你在生产环境中使用Docker社区版中是可行的，您可以使用Docker Cloud帮助您管理流行服务提供商（如Amazon Web Services，DigitalOcean和Microsoft Azure）上的应用程序。
+
+设置与部署
+
+* 将Docker Cloud与您的首选提供商连接，授予Docker Cloud权限，以便为您自动配置和“Dockerize”VM。
+* 使用Docker云创建你的计算资源和创建你的集群
+* 部署你的app
+
+注意：在这儿我们不能够链接到Docker云文档；确保你完成的每一步你都能回退回去。
+
+##### 连接到Docker云
+
+你可以使用标准模式或者集群模式运行Docker
+
+如果你使用标准模式运行Docker云，下面提供Docker云服务商说明文档链接
+
+* 亚马逊web服务设置指南 `https://docs.docker.com/docker-cloud/cloud-swarm/link-aws-swarm/`
+* DigitalOcean设置指南 `https://docs.docker.com/docker-cloud/infrastructure/link-do/`
+* Microsoft Azure设置指南 `https://docs.docker.com/docker-cloud/infrastructure/link-azure/`
+* Packet设置指南 `https://docs.docker.com/docker-cloud/infrastructure/link-packet/`
+* SoftLayer设置指南 `https://docs.docker.com/docker-cloud/infrastructure/link-softlayer/`
+* 使用Docker Cloud代理来携带自己的主机 `https://docs.docker.com/docker-cloud/infrastructure/byoh/`
+
+如果您在Swarm模式下运行（建议用于Amazon Web Services或Microsoft Azure），请跳至下一部分有关如何创建集群的部分。
+
+##### 创建集群
+
+准备创建集群
+
+如果你打算在亚马逊web服务器上创建集群，下面是在AWS上自动创建集群的链接
+
+    https://docs.docker.com/docker-cloud/cloud-swarm/create-cloud-swarm-aws/
+
+如果你使用微软的Azure，下面是在Azure上自动创建集群的链接
+
+    https://docs.docker.com/docker-cloud/cloud-swarm/create-cloud-swarm-azure/
+
+否则，在Docker Cloud用户界面中创建节点，并通过Docker Cloud运行通过SSH学习的第四节中的`docker swarm init`和`docker swarm join`命令。 最后，通过单击屏幕顶部的切换开启Swarm模式，并注册刚刚创建的swarm。
+
+注意：如果您使用Docker云代理自带主机，则此提供程序不支持集群模式。 您可以使用Docker Cloud注册您自己的现有集群。
+
+##### 部署你的App到云上
 
 
 
