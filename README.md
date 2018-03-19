@@ -2088,13 +2088,77 @@ Swarm管理人员可以使用多种策略来运行容器，例如“最空节点
 
 ##### 部署你的App到云上
 
+1.通过Docker Cloud连接到您的群集。 有几种不同的连接方式：
 
+从集群模式的Docker Cloud Web界面中，选择页面顶部的Swarms，单击要连接的群集，然后将给定的命令复制粘贴到命令行终端中。
 
+图片26:
+    ![图片26](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/26.png  "图片26")
 
+或者
 
+对于Mac版本和Windows版本的Docker，你可以直接通过桌面应用菜单连接到你的集群
 
+图片27:
+    ![图片27](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/27.png  "图片27")
 
+无论哪种方式，这将打开一个终端，其上下文是本地计算机，但其Docker命令会路由到云服务提供商上运行的群集。 您可以直接访问本地文件系统和远程群集，从而启用纯Docker命令。
 
+2.运行`docker stack deploy -c docker-compose.yml getstartedlab`来部署应用程序到云主机集群
 
+    docker stack deploy -c docker-compose.yml getstartedlab
 
+     Creating network getstartedlab_webnet
+     Creating service getstartedlab_web
+     Creating service getstartedlab_visualizer
+     Creating service getstartedlab_redis
 
+现在你的运用程序正在运行在云服务上
+
+##### 运行一些集群命令来验证部署
+
+您可以使用集群命令行来浏览和管理swarm。 以下是一些现在应该看起来很熟悉的例子：
+
+使用`docker node ls`来列出节点
+
+      [getstartedlab] ~ $ docker node ls
+      ID                            HOSTNAME                                      STATUS              AVAILABILITY        MANAGER STATUS
+      9442yi1zie2l34lj01frj3lsn     ip-172-31-5-208.us-west-1.compute.internal    Ready               Active              
+      jr02vg153pfx6jr0j66624e8a     ip-172-31-6-237.us-west-1.compute.internal    Ready               Active              
+      thpgwmoz3qefdvfzp7d9wzfvi     ip-172-31-18-121.us-west-1.compute.internal   Ready               Active              
+      n2bsny0r2b8fey6013kwnom3m *   ip-172-31-20-217.us-west-1.compute.internal   Ready               Active              Leader
+
+使用`docker service ls`来列出服务
+
+    [getstartedlab] ~/sandbox/getstart $ docker service ls
+    ID                  NAME                       MODE                REPLICAS            IMAGE                             PORTS
+    x3jyx6uukog9        dockercloud-server-proxy   global              1/1                 dockercloud/server-proxy          *:2376->2376/tcp
+    ioipby1vcxzm        getstartedlab_redis        replicated          0/1                 redis:latest                      *:6379->6379/tcp
+    u5cxv7ppv5o0        getstartedlab_visualizer   replicated          0/1                 dockersamples/visualizer:stable   *:8080->8080/tcp
+    vy7n2piyqrtr        getstartedlab_web          replicated          5/5                 sam/getstarted:part6    *:80->80/tcp
+
+使用`docker service ps <service>`来查看服务的任务
+
+    [getstartedlab] ~/sandbox/getstart $ docker service ps vy7n2piyqrtr
+    ID                  NAME                  IMAGE                            NODE                                          DESIRED STATE       CURRENT STATE            ERROR               PORTS
+    qrcd4a9lvjel        getstartedlab_web.1   sam/getstarted:part6   ip-172-31-5-208.us-west-1.compute.internal    Running             Running 20 seconds ago                       
+    sknya8t4m51u        getstartedlab_web.2   sam/getstarted:part6   ip-172-31-6-237.us-west-1.compute.internal    Running             Running 17 seconds ago                       
+    ia730lfnrslg        getstartedlab_web.3   sam/getstarted:part6   ip-172-31-20-217.us-west-1.compute.internal   Running             Running 21 seconds ago                       
+    1edaa97h9u4k        getstartedlab_web.4   sam/getstarted:part6   ip-172-31-18-121.us-west-1.compute.internal   Running             Running 21 seconds ago                       
+    uh64ez6ahuew        getstartedlab_web.5   sam/getstarted:part6   ip-172-31-18-121.us-west-1.compute.internal   Running             Running 22 seconds ago        
+
+##### 在云供应商机器上开放服务端口
+
+此时，您的应用作为一个集群部署在您的云提供商服务器上，正如刚刚运行的docker命令所证明的那样。 但是，您仍然需要在云服务器上打开端口，以便：
+
+* 允许在工作节点上的web服务和Redis服务互相进行通信
+* 允许入站流量通过工作节点上的Web服务，以便可以从Web浏览器访问Hello World和Visualizer。
+* 允许运行管理器的服务器上的入站SSH流量（这可能已在您的云提供商上设置）
+
+这些是您需要为每项服务公开的端口：
+
+|    服务     |     类别     |        协议        |          端口        |
+|------------|:------------:|-------------------|----------------------|
+|     web    |      HTTP    |         TCP       |          80          |
+| visualizer |   	HTTP	|         TCP	    |         8080         |
+|   redis	 |      TCP	    |         TCP	    |         6379         |
