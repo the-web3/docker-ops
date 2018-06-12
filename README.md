@@ -2508,13 +2508,99 @@ Docker镜像由只读层组成，每个层代表一个Dockerfile指令。 这些
 
 由Dockerfile定义的映像应该生成尽可能短暂的容器。 通过“短暂的”，我们的意思是容器可以被停止和销毁，然后重建并用绝对最小的设置和配置代替。
 
+##### 2.2.理解构建的上下文
+
+当您发出docker build命令时，当前的工作目录被称为构建上下文。 默认情况下，假设Dockerfile位于此处，但可以使用文件标志（-f）指定不同的位置。 无论Dockerfile实际存在于哪里，当前目录中文件和目录的所有递归内容都将作为构建上下文发送到Docker守护进程。
+
+* 构建上下文的例子
+
+为构建上下文创建一个目录并且cd进到这个目录，将“hello”写入名为hello的文本文件，并创建一个Dockerfile来运行cat，从构建上下文（.）中构建镜像：
+
+    mkdir myproject && cd myproject
+    echo "hello" > hello
+    echo -e "FROM busybox\nCOPY /hello /\nRUN cat /hello" > Dockerfile
+    docker build -t helloapp:v1 .
+
+将Dockerfile和hello移入单独的目录并构建第二个版本的镜像（不依赖上一次构建的缓存）。 使用-f指向Dockerfile并指定构建上下文的目录：
+
+    mkdir -p dockerfiles context
+    mv Dockerfile dockerfiles && mv hello context
+    docker build --no-cache -t helloapp:v2 -f dockerfiles/Dockerfile context
 
 
 
+无意中包含不需要构建镜像的文件会导致更大的构建上下文和更大的镜像大小。 这会增加构建镜像的时间，增加拉和推镜像的时间，容器运行时大小。 要查看构建上下文有多大，请在构建Dockerfile时查找如下所示的消息：
 
+    Sending build context to Docker daemon  187.8MB
 
+#### 3.通过stdin管道Dockerfile
 
+Docker 17.05添加了通过stdin管道Dockerfile使用本地或远程构建上下文构建镜像的功能。 在早期版本中，使用stdin的Dockerfile构建一个镜像不会发送构建上下文。
 
+##### 3.1.Docker17.04或者更低的版本
+
+    docker build -t foo -<<EOF
+    FROM busybox
+    RUN echo "hello world"
+    EOF
+
+##### 3.2.Docker17.05和更高版本(本地构建上下)
+
+    docker build -t . -f-<<EOF
+    FROM busybox
+    RUN echo "hello world"
+    COPY . /my-copied-files
+    EOF
+
+##### 3.3.Docker17.05和更高的版本(远程构建上下文)
+
+    docker build -t foo https://github.com/thajeztah/pgadmin4-docker.git -f-<<EOF
+    FROM busybox
+    COPY LICENSE config_local.py /usr/local/lib/python2.7/site-packages/pgadmin4/
+    EOF
+
+#### 4.排除.dockerignore
+
+要排除与构建无关的文件（不重构源代码库），请使用.dockerignore文件。 该文件支持与.gitignore文件类似的排除模式。 
+
+#### 5.使用多阶段构建
+
+多阶段构建（在Docker 17.05或更高版本中）允许您大幅缩减最终镜像的大小，而不需要努力减少中间层和文件的数量。
+
+由于镜像是在构建过程的最后阶段构建的，因此可以通过利用构建缓存来最小化镜像层。
+
+例如，如果您的版本包含多个镜像层，您可以从较不经常更改的版本（以确保版本缓存可重复使用）对较频繁更改的版本进行排序：
+
+* 安装构建应用程序所需的工具
+* 安装或更新库依赖项
+* 生成你的应用程序
+
+Go应用程序的Dockerfile可能如下所示：
+
+    FROM golang:1.9.2-alpine3.6 AS build
+
+    # Install tools required for project
+    # Run `docker build --no-cache .` to update dependencies
+    RUN apk add --no-cache git
+    RUN go get github.com/golang/dep/cmd/dep
+
+    # List project dependencies with Gopkg.toml and Gopkg.lock
+    # These layers are only re-built when Gopkg files are updated
+    COPY Gopkg.lock Gopkg.toml /go/src/project/
+    WORKDIR /go/src/project/
+    # Install library dependencies
+    RUN dep ensure -vendor-only
+
+    # Copy the entire project and build it
+    # This layer is rebuilt when a file changes in the project directory
+    COPY . /go/src/project/
+    RUN go build -o /bin/project
+
+    # This results in a single layer image
+    FROM scratch
+    COPY --from=build /bin/project /bin/project
+    ENTRYPOINT ["/bin/project"]
+    CMD ["--help"]
 
 
 
