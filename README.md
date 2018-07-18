@@ -2698,6 +2698,47 @@ FROM指令初始化新的构建阶段并为后续指令设置基本镜像。 因
         ARG VERSION
         RUN echo $VERSION > image_version
 
+##### 11.2.LABEL
+
+您可以为镜像添加标签，以帮助按项目组织镜像，记录许可信息，帮助实现自动化或出于其他原因。 对于每个标签，添加以LABEL开头并带有一个或多个键值对的行。 以下示例显示了不同的可接受格式。 内容包括解释性意见。
+
+注意：必须引用带空格的字符串或必须转义空格。 内引号字符（“）也必须转义。
+
+    LABEL com.example.version="0.0.1-beta"
+    LABEL vendor1="ACME Incorporated"
+    LABEL vendor2=ZENITH\ Incorporated
+    LABEL com.example.release-date="2015-02-12"
+    LABEL com.example.version.is-production=""
+
+图像可以有多个标签。 在Docker 1.10之前，建议将所有标签组合到单个LABEL指令中，以防止创建额外的层。 这不再是必需的，但仍然支持组合标签。
+
+    LABEL com.example.version="0.0.1-beta" com.example.release-date="2015-02-12"
+
+上面也可以写成下面这样
+
+    LABEL vendor=ACME\ Incorporated \
+          com.example.is-beta= \
+          com.example.is-production="" \
+          com.example.version="0.0.1-beta" \
+          com.example.release-date="2015-02-12"
+
+后续将会有一章的内容讲解Docker对象LABEL
+
+
+
+##### 11.3.RUN
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
