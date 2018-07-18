@@ -2725,19 +2725,40 @@ FROM指令初始化新的构建阶段并为后续指令设置基本镜像。 因
 后续将会有一章的内容讲解Docker对象LABEL
 
 
-
 ##### 11.3.RUN
 
+RUN指令有两种形式
+* ` RUN <command>`（shell格式，命令以shell的形式运行，在Linux系统上默认是`/bin/sh -c`, windows上是`cmd /S /C`）
+* `RUN ["executable", "param1", "param2"]`(exec 形式)
 
+RUN指令将在当前镜像之上的新镜像层中执行任何命令并提交结果。 生成的已提交镜像将用于`Dockerfile`中的下一步。
 
+分层`RUN`指令和生成提交符合Docker的核心概念，其中提交开销小，并且可以从镜像历史中的任何点创建容器，就像源代码控制一样。
 
+exec执行形式可以避免`shell`字符串重写，并使用不包含指定`shell`可执行文件的基本镜像来运行`RUN`指令。
 
+可以使用`SHELL`命令更改`shell`形式的默认`shell`指令。
 
+在shell形式的指令中，您可以使用`\`（反斜杠）将单个`RUN`指令继续到下一行。 例如，考虑以下两行：
 
+    RUN /bin/bash -c 'source $HOME/.bashrc; \
+    echo $HOME'
 
+上面的内容相当于下面的这一行
 
+    RUN /bin/bash -c 'source $HOME/.bashrc; echo $HOME'
 
+###### 注意：
 
+* 要使用除`“/ bin / sh”`之外的其他shell，请使用传入所需shell的exec形式。 例如，`RUN [“/ bin / bash”，“ - c”，“echo hello”`
+
+* exec形式被解析为JSON数组，这意味着您必须在单词而不是单引号（'）周围使用双引号（“）。
+
+* 与shell形式不同，exec形式不会调用命令shell。 这意味着不会发生正常的shell处理。 例如，`RUN [“echo”，“$ HOME”]`不会对`$HOME`执行变量替换。 如果你想要shell处理，那么要么使用shell形式，要么直接执行shell，例如：`RUN [“sh”，“ - c”，“echo $ HOME”]`。 当使用exec形式并直接执行shell时，就像shell形式的情况一样，它是执行环境变量扩展的shell，而不是docker。
+
+* 在JSON形式中，必须转义反斜杠。 这在反斜杠是路径分隔符的Windows上尤为重要。 由于不是有效的JSON，以下行将被视为shell形式，并以意外方式失败：`RUN [“c：\windows\system32\tasklist.exe”]`; 此示例的正确语法是：`RUN [“C：\\\\窗户SYSTEM32\\ tasklist.exe“]`
+
+在使用反斜杠分隔的多行上拆分长或复杂的RUN语句，以使Dockerfile更具可读性，可理解性和可维护性。
 
 
 
