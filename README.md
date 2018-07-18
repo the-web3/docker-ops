@@ -2653,13 +2653,50 @@ Go应用程序的Dockerfile可能如下所示：
 
 缓存无效后，所有后续Dockerfile命令都会生成新镜像，并且不使用缓存。
 
+#### 11.Dockerfile指令集
 
+这些建议旨在帮助您创建高效且可维护的Dockerfile。
 
+##### 11.1.FROM
 
+尽可能使用当前的官方存储库作为镜像的基础。 我们推荐Alpine镜像，因为它受到严格控制并且尺寸较小（目前小于5 MB），同时仍然是完整的Linux发行版。
 
+FROM的使用格式如下：
 
+    FROM <image> [AS <name>]
 
+或者
 
+    FROM <image>[:<tag>] [AS <name>]
+
+或者
+
+    FROM <image>[@<digest>] [AS <name>]
+
+FROM指令初始化新的构建阶段并为后续指令设置基本镜像。 因此，有效的Dockerfile必须以FROM指令开头。 镜像可以是任何有效镜像-通过从公共存储库中提取镜像来启动它尤其容易。
+
+* ARG是Dockerfile中唯一可以在FROM之前的指令。
+* FROM可以在单个Dockerfile中多次出现以创建多个镜像，或者使用一个构建阶段作为另一个构建阶段的依赖项。 只需在每个新的FROM指令之前记下提交输出的最后一个镜像ID。 每个FROM指令清除先前指令创建的任何状态。
+* 可以选择通过将`AS name`添加到FROM指令，可以将名称赋予新的构建阶段。 该名称可以在后续的`FROM`和`COPY --from = <name | index>`指令中使用，以引用此阶段构建的镜像。
+* 标记或摘要值是可选的。 如果省略其中任何一个，则构建器默认采用最新标记。 如果找不到标记值，构建器将返回错误。
+
+###### 理解ARG和FROM如何互动
+
+* FROM指令支持在第一个FROM之前发生的任何ARG指令声明的变量。
+
+        ARG  CODE_VERSION=latest
+        FROM base:${CODE_VERSION}
+        CMD  /code/run-app
+
+        FROM extras:${CODE_VERSION}
+        CMD  /code/run-extras
+
+* 在FROM之前声明的ARG在构建阶段之外，因此在FROM之后的任何指令中都不能使用它。 要使用在第一个FROM之前声明的ARG的默认值，请使用没有构建阶段内的值的ARG指令：
+
+        ARG VERSION=latest
+        FROM busybox:$VERSION
+        ARG VERSION
+        RUN echo $VERSION > image_version
 
 
 
