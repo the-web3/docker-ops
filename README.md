@@ -2761,6 +2761,56 @@ exec执行形式可以避免`shell`字符串重写，并使用不包含指定`sh
 在使用反斜杠分隔的多行上拆分长或复杂的RUN语句，以使Dockerfile更具可读性，可理解性和可维护性。
 
 
+###### Run指令的两个使用案例
+
+1.APT-GET
+
+RUN指令的最常用的使用案列可能就是`apt-get`应用，因为它在安装包的时候经常使用，所以`RUN apt-get`命令有几个需要注意的问题。
+
+避免`RUN apt-get`升级和`dist-upgrade`，因为父映像中的许多“基本”包无法在非特权容器内升级。 如果父镜像中包含的包已过期，请与其维护人员联系。 如果您知道需要更新的特定包foo，请使用`apt-get install -y foo`自动更新。
+
+始终将RUN apt-get update与apt-get install结合在同一个RUN语句中。 例如：
+
+     RUN apt-get update && apt-get install -y \
+            package-bar \
+            package-baz \
+            package-foo
+
+在RUN语句中单独使用`apt-get update`会导致缓存问题，以及后续的`apt-get install`执行失败。 例如，假设你有一个Dockerfile：
+
+    FROM ubuntu:14.04
+    RUN apt-get update
+    RUN apt-get install -y curl
+
+
+构建镜像后，所有镜像层都在Docker缓存中。 假想您稍后通过添加额外的包来修改`apt-get install`：
+
+    FROM ubuntu:14.04
+        RUN apt-get update
+        RUN apt-get install -y curl nginx
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
