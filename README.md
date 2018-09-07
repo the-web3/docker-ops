@@ -2847,14 +2847,30 @@ Dockerfile中只能有一条CMD指令。 如果列出多个CMD，则只有最后
 
 CMD的主要目的是为执行容器提供默认值。 这些默认值可以包含可执行文件，也可以省略可执行文件，在这种情况下，您还必须指定ENTRYPOINT指令。
 
+注意：如果使用CMD为ENTRYPOINT指令提供默认参数，则应使用JSON数组格式指定CMD和ENTRYPOINT指令。
 
+注意：exec表单被解析为JSON数组，这意味着必须使用双引号（“）来围绕单词而不是单引号（'）
 
+注意：与shell表单不同，exec表单不会调用命令shell。 这意味着不会发生正常的shell处理。 例如，CMD [“echo”，“$ HOME”]不会对$ HOME进行变量替换。 如果你想要shell处理，那么要么使用shell表单，要么直接执行shell，例如：CMD [“sh”，“ - c”，“echo $ HOME”]。 当使用exec表单并直接执行shell时，就像shell表单的情况一样，它是执行环境变量扩展的shell，而不是docker。
 
+在shell或exec格式中使用时，CMD指令设置运行映像时要执行的命令。
 
+如果你使用CMD的shell形式，那么<command>将在/bin/sh -c中执行：
 
+        FROM ubuntu
+        CMD echo "This is a test." | wc -
 
+如果要在没有shell的情况下运行<command>，则必须将该命令表示为JSON数组，并提供可执行文件的完整路径。 此数组形式是CMD的首选格式。 任何其他参数必须在数组中单独表示为字符串：
 
+        FROM ubuntu
+        CMD ["/usr/bin/wc","--help"]
 
+如果您希望容器每次都运行相同的可执行文件，那么您应该考虑将ENTRYPOINT与CMD结合使用。
 
+如果用户指定了docker run的参数，那么它们将覆盖CMD中指定的默认值。
 
+注意：不要将RUN与CMD混淆。 RUN实际上运行一个命令并提交结果; CMD在构建时不执行任何操作，但指定了镜像的预期命令。
 
+CMD指令应该用于运行镜像包含的软件以及任何参数。 CMD应该几乎总是以CMD [“executable”，“param1”，“param2”......]的形式使用。 因此，如果图像用于服务，例如Apache和Rails，则可以运行类似CMD [“apache2”，“ - DFOREGROUND”]的内容。 实际上，建议将这种形式的指令用于任何基于服务的图像。
+
+在大多数其他情况下，应该给CMD一个交互式shell，比如bash，python和perl。 例如，CMD [“perl”，“ - de0”]，CMD [“python”]或CMD [“php”，“ - a”]。 使用这个表单意味着当你执行像docker run -it python这样的东西时，你将被放入一个可用的shell中，准备好了。 CMD应该很少以CMD [“param”，“param”]的方式与ENTRYPOINT一起使用，除非您和您的预期用户已经非常熟悉ENTRYPOINT的工作原理。
