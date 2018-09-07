@@ -2907,6 +2907,80 @@ docker network命令支持创建用于容器之间通信的网络，而无需公
 
 ENV指令将环境变量<key>设置为值<value>。 此值将在构建阶段中所有后续指令的环境中，并且也可以在许多内联替换。
 
+ENV指令有两种形式。 第一种形式ENV <key> <value>，将单个变量设置为一个值。 第一个空格后面的整个字符串将被视为<value> - 包括空格字符。 该值将针对其他环境变量进行解释，因此如果未对其进行转义，则将删除引号字符。
+    
+第二种形式ENV <key> = <value> ...允许一次设置多个变量。 请注意，第二种形式在语法中使用等号（=），而第一种形式则不然。 与命令行解析一样，引号和反斜杠可用于在值内包含空格。
+    
+例如：
+
+    ENV myName="John Doe" myDog=Rex\ The\ Dog \
+        myCat=fluffy
+    
+或者
+
+    ENV myName John Doe
+    ENV myDog Rex The Dog
+    ENV myCat fluffy
+
+将在最终镜像中产生相同的净结果。
+
+当从生成的镜像中运行容器时，使用ENV设置的环境变量将保持不变。 您可以使用docker inspect查看值，并使用docker run --env <key> = <value>更改它们。
+
+注意：环境持久性可能会导致意外的副作用。 例如，设置ENV DEBIAN_FRONTEND非交互式可能会使基于Debian的图像上的apt-get用户感到困惑。 要为单个命令设置值，请使用RUN <key> = <value> <command>。
+    
+为了使新软件更易于运行，您可以使用ENV更新容器安装的软件的PATH环境变量。 例如，ENV PATH/usr/local/nginx/bin：$PATH确保CMD [“nginx”]正常工作。
+
+ENV指令对于提供特定于您希望容纳的服务的必需环境变量也很有用，例如Postgres的PGDATA。
+
+最后，ENV还可用于设置常用的版本号，以便更容易维护版本颠簸，如下例所示：
+
+    ENV PG_MAJOR 9.3
+    ENV PG_VERSION 9.3.4
+    RUN curl -SL http://example.com/postgres-$PG_VERSION.tar.xz | tar -xJC /usr/src/postgress && …
+    ENV PATH /usr/local/postgres-$PG_MAJOR/bin:$PATH
+
+与在程序中使用常量变量（与硬编码值相反）类似，此方法允许您更改单个ENV指令以自动神奇地破坏容器中的软件版本。
+
+每条ENV线都会创建一个新的中间层，就像RUN命令一样。 这意味着即使您在将来的镜像中取消设置环境变量，它仍然会在此镜像层中保留，并且可以转储其值。 您可以通过创建如下所示的Dockerfile来测试它，然后构建它。
+
+    FROM alpine
+    ENV ADMIN_USER="mark"
+    RUN echo $ADMIN_USER > ./mark
+    RUN unset ADMIN_USER
+    CMD sh
+
+    docker run --rm -it test sh echo $ADMIN_USER
+    mark
+
+要防止这种情况，并且确实取消设置环境变量，请使用带有shell命令的RUN命令，在单个镜像层中设置，使用和取消设置变量all。 您可以将命令分开; 要么＆&。 如果您使用第二种方法，并且其中一个命令失败，则docker构建也会失败。 这通常是一个好主意。 使用\作为Linux Dockerfiles的行继续符可以提高可读性。 您还可以将所有命令放入shell脚本中，并使用RUN命令运行该shell脚本。
+
+    FROM alpine
+    RUN export ADMIN_USER="mark" \
+        && echo $ADMIN_USER > ./mark \
+        && unset ADMIN_USER
+    CMD sh
+
+    docker run --rm -it test sh echo $ADMIN_USER
+
+
+###### ADD或者COPY指令
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
