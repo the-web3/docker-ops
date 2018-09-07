@@ -2963,9 +2963,12 @@ ENV指令对于提供特定于您希望容纳的服务的必需环境变量也�
     docker run --rm -it test sh echo $ADMIN_USER
 
 
-###### ADD或者COPY指令
+###### ADD指令
 
+Add指令有两种格式
 
+    ADD [--chown=<user>:<group>] <src>... <dest>
+    ADD [--chown=<user>:<group>] ["<src>",... "<dest>"]
 
 
 
