@@ -2843,8 +2843,9 @@ CMD指令有三种格式
 * CMD ["param1","param2"] (默认参数入口点形式)
 * CMD command param1 param2 (shell命令形式)
 
+Dockerfile中只能有一条CMD指令。 如果列出多个CMD，则只有最后一个CMD才会生效。
 
-
+CMD的主要目的是为执行容器提供默认值。 这些默认值可以包含可执行文件，也可以省略可执行文件，在这种情况下，您还必须指定ENTRYPOINT指令。
 
 
 
