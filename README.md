@@ -2874,3 +2874,64 @@ CMD的主要目的是为执行容器提供默认值。 这些默认值可以包�
 CMD指令应该用于运行镜像包含的软件以及任何参数。 CMD应该几乎总是以CMD [“executable”，“param1”，“param2”......]的形式使用。 因此，如果图像用于服务，例如Apache和Rails，则可以运行类似CMD [“apache2”，“ - DFOREGROUND”]的内容。 实际上，建议将这种形式的指令用于任何基于服务的图像。
 
 在大多数其他情况下，应该给CMD一个交互式shell，比如bash，python和perl。 例如，CMD [“perl”，“ - de0”]，CMD [“python”]或CMD [“php”，“ - a”]。 使用这个表单意味着当你执行像docker run -it python这样的东西时，你将被放入一个可用的shell中，准备好了。 CMD应该很少以CMD [“param”，“param”]的方式与ENTRYPOINT一起使用，除非您和您的预期用户已经非常熟悉ENTRYPOINT的工作原理。
+
+###### EXPOSE指令
+
+    EXPOSE <port> [<port>/<protocol>...]
+
+EXPOSE指令是Docker容器在运行时用来指定监听的端口。 指定监听端口可以是TCP，也可是UDP，如果未指定协议，则默认为TCP。
+
+EXPOSE指令实际上不发布端口。 它作为构建镜像的人和运行容器的人之间的一种文档，用于发布要发布的端口。 要在运行容器时实际发布端口，请在docker run上使用-p标志发布和映射一个或多个端口，或使用-P标志发布所有公开的端口并将它们映射到高阶端口。
+
+默认情况下，EXPOSE假定为TCP。 您还可以指定UDP：
+
+    EXPOSE 80/udp
+
+要在TCP和UDP上公开，请包含两行：
+
+    EXPOSE 80/tcp
+    EXPOSE 80/udp
+
+在这种情况下，如果将-P与docker run一起使用，则端口将针对TCP公开一次，针对UDP公开一次。 请记住，-P在主机上使用短暂的高阶主机端口，因此TCP和UDP的端口不同。
+
+无论EXPOSE设置如何，您都可以使用-p标志在运行时覆盖它们。 例如
+
+    docker run -p 80:80/tcp -p 80:80/udp ...
+    
+docker network命令支持创建用于容器之间通信的网络，而无需公开或发布特定端口，因为连接到网络的容器可以通过任何端口相互通信。 
+
+###### ENV指令
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
