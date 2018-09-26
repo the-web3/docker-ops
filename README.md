@@ -2970,12 +2970,34 @@ Add指令有两种格式
     ADD [--chown=<user>:<group>] <src>... <dest>
     ADD [--chown=<user>:<group>] ["<src>",... "<dest>"]
 
+注意：--chown功能仅在用于构建Linux容器的Dockerfiles上受支持，并且不适用于Windows容器。 由于用户和组所有权概念不能在Linux和Windows之间进行转换，因此使用/etc/ passwd和/etc/group将用户名和组名转换为ID会限制此功能仅适用于基于Linux OS的容器。
 
+ADD指令从<src>复制新文件，目录或远程文件URL，并将它们添加到路径<dest>的镜像文件系统中。
 
+可以指定多个<src>资源，但如果它们是文件或目录，则它们的路径将被解释为相对于构建上下文的源。
 
+每个<src>可能包含通配符，匹配将使用Go的filepath.Match规则完成。 例如：
 
+    ADD hom* /mydir/        # adds all files starting with "hom"
+    ADD hom?.txt /mydir/    # ? is replaced with any single character, e.g., "home.txt"
 
+<dest>是绝对路径，或相对于WORKDIR的路径，源将在目标容器中复制到该路径中。
 
+    ADD test relativeDir/          # adds "test" to `WORKDIR`/relativeDir/
+    ADD test /absoluteDir/         # adds "test" to /absoluteDir/
+
+当添加一个包含特定字符的文件或者目录【例如"["或者"]"】，需要按照Golang规则转义这些路径，以防止它们被视为匹配模式。 例如，要添加名为arr[0].txt的文件，请使用以下命令：
+
+    ADD arr[[]0].txt /mydir/    # copy a file named "arr[0].txt" to /mydir/
+
+除非可选的--chown标志指定给定用户名，组名或UID/GID组合以请求添加内容的特定所有权，否则将使用UID和GID为0创建所有新文件和目录。 --chown标志的格式允许用户名和组名字符串或任意组合的直接整数UID和GID。 提供没有组名的用户名或没有GID的UID将使用与GID相同的数字UID。 如果提供了用户名或组名，则容器的根文件系统/etc/passwd和/etc/group文件将分别用于执行从名称到整数UID或GID的转换。 以下示例显示了--chown标志的有效定义：
+
+    ADD --chown=55:mygroup files* /somedir/
+    ADD --chown=bin files* /somedir/
+    ADD --chown=1 files* /somedir/
+    ADD --chown=10:11 files* /somedir/
+    
+如果容器根文件系统不包含/etc/passwd或/etc/group文件，并且在--chown标志中使用了用户名或组名，则构建将在ADD操作上失败。 使用数字ID不需要查找，也不依赖于容器根文件系统内容。
 
 
 
