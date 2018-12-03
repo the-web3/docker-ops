@@ -671,5 +671,35 @@ COPY指令从<src>复制新文件或目录，并将它们添加到路径<dest>�
     COPY hom* /mydir/       
     COPY hom?.txt /mydir/    
     
+<dest>是绝对路径，或相对于WORKDIR的路径，源将在目标容器中复制到该路径中。
+    
+    COPY test relativeDir/   
+    COPY test /absoluteDir/ 
+
+复制包含特殊字符（例如[和]）的文件或目录时，需要按照Golang规则转义这些路径，以防止它们被视为匹配模式。 例如，要复制名为arr [0] .txt的文件，请使用以下命令：
+
+    COPY arr[[]0].txt /mydir/
+
+除非可选的--chown标志指定给定用户名，组名或UID/GID组合以请求复制内容的特定所有权，否则将使用UID和GID为0创建所有新文件和目录。 --chown标志的格式允许用户名和组名字符串或任意组合的直接整数UID和GID。 提供没有组名的用户名或没有GID的UID将使用与GID相同的数字UID。 如果提供了用户名或组名，则容器的根文件系统/etc/passwd和/etc/group文件将分别用于执行从名称到整数UID或GID的转换。 以下示例显示了--chown标志的有效定义：
+
+    COPY --chown=55:mygroup files* /somedir/
+    COPY --chown=bin files* /somedir/
+    COPY --chown=1 files* /somedir/
+    COPY --chown=10:11 files* /somedir/
+
+如果容器根文件系统不包含/etc/passwd或/etc/group文件，并且在--chown标志中使用了用户名或组名，则构建将在COPY操作上失败。 使用数字ID不需要查找，也不依赖于容器根文件系统内容。
+
+*注意：如果使用STDIN（docker build - <somefile）构建，则没有构建上下文，因此无法使用COPY。
+
+可选地，COPY接受一个标志--from = <name | index>，可用于将源位置设置为先前的构建阶段（使用FROM .. AS <name>创建），而不是由发送的构建上下文用户。 该标志还接受为使用FROM指令启动的所有先前构建阶段分配的数字索引。 如果找不到具有指定名称的构建阶段，则尝试使用具有相同名称的图像。
+    
+copy指令遵循下面的规则
+
+
+
+
+
+
+
 
 
