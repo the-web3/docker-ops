@@ -578,7 +578,7 @@ ENV指令对于提供特定于您希望容纳的服务的必需环境变量也�
     docker run --rm -it test sh echo $ADMIN_USER
 
 
-###### ADD指令
+###### ADD指令和Copy指令
 
 Add指令有两种格式
 
@@ -613,3 +613,35 @@ ADD指令从<src>复制新文件，目录或远程文件URL，并将它们添加
     ADD --chown=10:11 files* /somedir/
     
 如果容器根文件系统不包含/etc/passwd或/etc/group文件，并且在--chown标志中使用了用户名或组名，则构建将在ADD操作上失败。 使用数字ID不需要查找，也不依赖于容器根文件系统内容。
+
+在<src>是远程文件URL的情况下，目标将具有600的权限。如果正在检索的远程文件具有HTTP Last-Modified标头，则该标头的时间戳将用于设置目标文件上的mtime。 但是，与其他ADD期间处理的任何文件一样，mtime将不包含确定文件是否已更改和缓存更新。
+
+*注意：如果通过将Dockerfile传递给STDIN（docker build - <somefile）来构建，则没有构建上下文，因此Dockerfile只能包含基于URL的ADD指令。 您还可以通过STDIN传递压缩存档：（docker build - <archive.tar.gz），存档根目录下的Dockerfile，存档的其余部分将用作构建的上下文。
+
+*注意：如果您的URL文件使用身份验证进行保护，则需要使用`RUN wget`，`RUN curl`或使用容器内的其他工具，因为`ADD`指令不支持身份验证。
+
+*注意：如果`<src>`的内容已更改，则第一个遇到的`ADD`指令将使来自`Dockerfile`的所有后续指令的高速缓存无效。 这包括使RUN指令的高速缓存无效。 
+    
+
+ADD指令遵循下面的原则
+
+* <src>路径必须位于构建的上下文中;你不能添加../something/something，因为docker构建的第一步是将上下文目录（和子目录）发送到docker守护进程。
+
+* 如果<src>是URL且<dest>不以尾部斜杠结尾，则从URL下载文件并将其复制到<dest>。
+
+* 如果<src>是URL并且<dest>以尾部斜杠结尾，则从URL推断文件名，并将文件下载到<dest>/<filename>。例如，ADD http://example.com/foobar/将创建文件/ foobar。 URL必须具有非常重要的路径，以便在这种情况下可以发现适当的文件名（http://example.com将不起作用）。
+
+* 如果<src>是目录，则复制目录的全部内容，包括文件系统元数据。
+
+*注意：你的内容将不会被复制，仅仅复制它的内容
+
+
+
+
+
+
+
+
+
+
+
