@@ -6,7 +6,7 @@
 
 ### [第二章：不同的平台上安装Docker与使用](https://github.com/guoshijiang/docker-virtual-technology/tree/master/chapterTwo)
 
-### [第三章：Docke的使用](https://github.com/guoshijiang/docker-virtual-technology/tree/master/chapterThree)
+### [第三章：Docker的使用](https://github.com/guoshijiang/docker-virtual-technology/tree/master/chapterThree)
 
 ### [第四章：Docker层次结构](https://github.com/guoshijiang/docker-virtual-technology/tree/master/chapterFour)
 
