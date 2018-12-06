@@ -695,11 +695,154 @@ COPY指令从<src>复制新文件或目录，并将它们添加到路径<dest>�
     
 copy指令遵循下面的规则
 
+* <src>路径必须位于构建的上下文中; 你不能COPY ../something / something，因为docker build的第一步是将上下文目录（和子目录）发送到docker守护进程。
+* 如果<src>是目录，则复制目录的全部内容，包括文件系统元数据。
+
+*注意：不复制目录本身，只复制其内容。
+
+** 如果<src>是任何其他类型的文件，则将其与元数据一起单独复制。在这种情况下，如果<dest>以尾部斜杠/结束，则将其视为目录，<src>的内容将写入<dest>/ base（<src>）。
+
+** 如果直接或由于使用通配符指定了多个<src>资源，则<dest>必须是目录，并且必须以斜杠/结尾。
+
+** 如果<dest>不以尾部斜杠结束，则它将被视为常规文件，<src>的内容将写入<dest>。
+
+** 如果<dest>不存在，则会在其路径中创建所有缺少的目录。
+
+尽管ADD和COPY在功能上相似，但一般来说，COPY是优选的。 那是因为它比ADD更透明。 COPY仅支持将本地文件基本复制到容器中，而ADD具有一些功能（如仅限本地的tar提取和远程URL支持），这些功能并不是很明显。 因此，ADD的最佳用途是将本地tar文件自动提取到镜像中，如ADD rootfs.tar.xz /中所示。
+
+如果您有多个使用上下文中不同文件的Dockerfile步骤，请单独复制它们，而不是一次复制它们。 这可确保每个步骤的构建缓存仅在特定所需文件更改时失效（强制重新执行该步骤）。
+
+例如： 
+
+    COPY requirements.txt /tmp/
+    RUN pip install --requirement /tmp/requirements.txt
+    COPY . /tmp/
+
+与放置COPY相比，RUN步骤的缓存失效更少。 /tmp/之前。
+
+由于图像大小很重要，因此强烈建议不要使用ADD从远程URL中提取包。 你应该使用curl或wget代替。 这样，您可以删除提取后不再需要的文件，也不必在图像中添加其他图层。 例如，你应该避免做以下事情：
+
+    ADD http://example.com/big.tar.xz /usr/src/things/
+    RUN tar -xJf /usr/src/things/big.tar.xz -C /usr/src/things
+    RUN make -C /usr/src/things all
+
+也可以像下面这样做
+
+    RUN mkdir -p /usr/src/things \
+        && curl -SL http://example.com/big.tar.xz \
+        | tar -xJC /usr/src/things \
+        && make -C /usr/src/things all
+
+对于不需要ADD的tar自动提取功能的其他项目（文件，目录），应始终使用COPY。
+
+
+###### ENTRYPOINT
+
+ENTRYPOINT命令的两种格式
+
+* exec格式
+
+    ENTRYPOINT ["executable", "param1", "param2"] 
+    
+* shell格式
+
+    ENTRYPOINT command param1 param2 
+
+ENTRYPOINT允许您配置将作为可执行文件运行的容器。
+
+例如，以下将使用其默认内容启动nginx，侦听端口80：
+
+    docker run -i -t --rm -p 80:80 nginx
+
+docker run <image>的命令行参数将在exec中的所有元素形成ENTRYPOINT后附加，并将覆盖使用CMD指定的所有元素。 这允许将参数传递给入口点，即docker run <image> -d将-d参数传递给入口点。 您可以使用docker run --entrypoint标志覆盖ENTRYPOINT指令。
+    
+shell表单阻止使用任何CMD或运行命令行参数，但缺点是ENTRYPOINT将作为/bin/sh -c的子命令启动，它不传递信号。 这意味着可执行文件不是容器的PID 1 - 并且不会接收Unix信号 - 因此您的可执行文件将不会从docker stop <container>接收SIGTERM。
+    
+只有Dockerfile中的最后一个ENTRYPOINT指令才会生效。
+
+EXEC格式的ENTRYPOINT例子
+
+您可以使用ENTRYPOINT的exec形式设置相当稳定的默认命令和参数，然后使用任一形式的CMD来设置更可能更改的其他默认值。
+
+    FROM ubuntu
+    ENTRYPOINT ["top", "-b"]
+    CMD ["-c"]
+
+运行容器时，您可以看到top是唯一的进程：
+
+    $ docker run -it --rm --name test  top -H
+    top - 08:25:00 up  7:27,  0 users,  load average: 0.00, 0.01, 0.05
+    Threads:   1 total,   1 running,   0 sleeping,   0 stopped,   0 zombie
+    %Cpu(s):  0.1 us,  0.1 sy,  0.0 ni, 99.7 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+    KiB Mem:   2056668 total,  1616832 used,   439836 free,    99352 buffers
+    KiB Swap:  1441840 total,        0 used,  1441840 free.  1324440 cached Mem
+
+      PID USER      PR  NI    VIRT    RES    SHR S %CPU %MEM     TIME+ COMMAND
+        1 root      20   0   19744   2336   2080 R  0.0  0.1   0:00.04 top
+
+测试进一步的结果，你可以使用`docker exec`
+
+    $ docker exec -it test ps aux
+    USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+    root         1  2.6  0.1  19752  2352 ?        Ss+  08:24   0:00 top -b -H
+    root         7  0.0  0.1  15572  2164 ?        R+   08:25   0:00 ps aux
+
+你可以使用`docker stop test`优雅地请求`stop`来关闭
+
+以下Dockerfile显示使用ENTRYPOINT在前台运行Apache（即，作为PID 1）：
+
+    FROM debian:stable
+    RUN apt-get update && apt-get install -y --force-yes apache2
+    EXPOSE 80 443
+    VOLUME ["/var/www", "/var/log/apache2", "/etc/apache2"]
+    ENTRYPOINT ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
+ 
+如果需要为单个可执行文件编写启动脚本，可以使用exec和gosu命令确保最终的可执行文件接收Unix信号：
+
+    #!/usr/bin/env bash
+    set -e
+
+    if [ "$1" = 'postgres' ]; then
+        chown -R postgres "$PGDATA"
+
+        if [ -z "$(ls -A "$PGDATA")" ]; then
+            gosu postgres initdb
+        fi
+
+        exec gosu postgres "$@"
+    fi
+
+    exec "$@"
+
+最后，如果您需要在关机时进行一些额外的清理（或与其他容器通信），或者协调多个可执行文件，您可能需要确保ENTRYPOINT脚本接收Unix信号，传递它们，然后 做了一些工作：
+
+    #!/bin/sh
+    # Note: I've written this using sh so it works in the busybox container too
+
+    # USE the trap if you need to also do manual cleanup after the service is stopped,
+    #     or need to start multiple services in the one container
+    trap "echo TRAPed signal" HUP INT QUIT TERM
+
+    # start service in background here
+    /usr/sbin/apachectl start
+
+    echo "[hit enter key to exit] or run 'docker stop <container>'"
+    read
+
+    # stop service and clean up here
+    echo "stopping apache"
+    /usr/sbin/apachectl stop
+
+    echo "exited $0"
 
 
 
+###### VOLUME
 
+###### USER
 
+###### WORKDIR
 
+###### ONBUILD
 
 
