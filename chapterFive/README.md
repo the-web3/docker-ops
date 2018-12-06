@@ -760,7 +760,7 @@ shell表单阻止使用任何CMD或运行命令行参数，但缺点是ENTRYPOIN
     
 只有Dockerfile中的最后一个ENTRYPOINT指令才会生效。
 
-EXEC格式的ENTRYPOINT例子
+###### EXEC格式的ENTRYPOINT例子
 
 您可以使用ENTRYPOINT的exec形式设置相当稳定的默认命令和参数，然后使用任一形式的CMD来设置更可能更改的其他默认值。
 
@@ -834,10 +834,45 @@ EXEC格式的ENTRYPOINT例子
     /usr/sbin/apachectl stop
 
     echo "exited $0"
+    
+如果使用docker run -it -rm -p 80:80 --name test apache运行此映像，则可以使用docker exec或docker top检查容器的进程，然后让脚本停止Apache：
+
+    $ docker exec -it test ps aux
+    USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+    root         1  0.1  0.0   4448   692 ?        Ss+  00:42   0:00 /bin/sh /run.sh 123 cmd cmd2
+    root        19  0.0  0.2  71304  4440 ?        Ss   00:42   0:00 /usr/sbin/apache2 -k start
+    www-data    20  0.2  0.2 360468  6004 ?        Sl   00:42   0:00 /usr/sbin/apache2 -k start
+    www-data    21  0.2  0.2 360468  6000 ?        Sl   00:42   0:00 /usr/sbin/apache2 -k start
+    root        81  0.0  0.1  15572  2140 ?        R+   00:44   0:00 ps aux
+    $ docker top test
+    PID                 USER                COMMAND
+    10035               root                {run.sh} /bin/sh /run.sh 123 cmd cmd2
+    10054               root                /usr/sbin/apache2 -k start
+    10055               33                  /usr/sbin/apache2 -k start
+    10056               33                  /usr/sbin/apache2 -k start
+    $ /usr/bin/time docker stop test
+    test
+    real	0m 0.27s
+    user	0m 0.03s
+    sys	0m 0.03s
+
+注意：您可以使用--entrypoint覆盖ENTRYPOINT设置，但这只能将二进制设置为exec（不会使用sh -c）。
+
+注意：exec形式被解析为JSON数组，这意味着您必须使用双引号（“）来围绕单词而不是单引号（'）。
 
 
+注意：与shell表单不同，exec表单不会调用命令shell。 这意味着不会发生正常的shell处理。 例如，ENTRYPOINT [“echo”，“$ HOME”]不会对$ HOME执行变量替换。 如果你想要shell处理，那么要么使用shell表单，要么直接执行shell，例如：ENTRYPOINT [“sh”，“ - c”，“echo $ HOME”]。 当使用exec表单并直接执行shell时，就像shell表单的情况一样，它是执行环境变量扩展的shell，而不是docker。
+
+###### shell形式的ENTRYPOINT案列
+
+您可以为ENTRYPOINT指定一个纯字符串，它将在/ bin / sh -c中执行。 此表单将使用shell处理来替换shell环境变量，并将忽略任何CMD或docker运行命令行参数。 要确保docker stop能正确发出任何长时间运行的ENTRYPOINT可执行文件，你需要记住用exec启动它：
+
+    FROM ubuntu
+    ENTRYPOINT exec top -b
 
 ###### VOLUME
+
+
 
 ###### USER
 
