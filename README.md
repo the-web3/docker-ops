@@ -60,6 +60,14 @@ https://github.com/guoshijiang
 https://blog.csdn.net/jiang_xinxing
 
 ###### 个人公众号：
+.： 
+    ![.： 
+](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/%E5%9B%BE%E7%89%871.png)
+
+.： 
+    ![.： 
+](https://github.com/guoshijiang/docker-virtual-technology/blob/master/images/%E5%9B%BE%E7%89%872.png)
+
         
 #### 苏镇
 
