@@ -869,6 +869,126 @@ shell表单阻止使用任何CMD或运行命令行参数，但缺点是ENTRYPOIN
 
     FROM ubuntu
     ENTRYPOINT exec top -b
+    
+运行此镜像时，您将看到单个PID 1进程：
+
+    docker run -it --rm --name test top
+    Mem: 1704520K used, 352148K free, 0K shrd, 0K buff, 140368121167873K cached
+    CPU:   5% usr   0% sys   0% nic  94% idle   0% io   0% irq   0% sirq
+    Load average: 0.08 0.03 0.05 2/98 6
+      PID  PPID USER     STAT   VSZ %VSZ %CPU COMMAND
+        1     0 root     R     3164   0%   0% top -b
+
+哪个将在docker stop上干净地退出：
+
+    $ /usr/bin/time docker stop test
+    test
+    real	0m 0.20s
+    user	0m 0.02s
+    sys	0m 0.04s
+
+如果您忘记将exec添加到ENTRYPOINT的开头：
+
+    FROM ubuntu
+    ENTRYPOINT top -b
+    CMD --ignored-param1
+
+然后，您可以运行它（为下一步命名）：
+
+    $ docker run -it --name test top --ignored-param2
+    Mem: 1704184K used, 352484K free, 0K shrd, 0K buff, 140621524238337K cached
+    CPU:   9% usr   2% sys   0% nic  88% idle   0% io   0% irq   0% sirq
+    Load average: 0.01 0.02 0.05 2/101 7
+      PID  PPID USER     STAT   VSZ %VSZ %CPU COMMAND
+        1     0 root     S     3168   0%   0% /bin/sh -c top -b cmd cmd2
+        7     1 root     R     3164   0%   0% top -b
+    
+您可以从top的输出中看到指定的ENTRYPOINT不是PID 1。
+
+如果然后运行docker stop test，容器将不会干净地退出 -  stop命令将被强制在超时后发送SIGKILL：    
+    
+    $ docker exec -it test ps aux
+    PID   USER     COMMAND
+        1 root     /bin/sh -c top -b cmd cmd2
+        7 root     top -b
+        8 root     ps aux
+    $ /usr/bin/time docker stop test
+    test
+    real	0m 10.19s
+    user	0m 0.04s
+    sys	0m 0.03s
+    
+###### 理解CMD和ENTRYparty如何交互
+
+CMD和ENTRYPOINT指令都定义了运行容器时执行的命令。 很少有规则描述他们的协作。
+
+* Dockerfile应至少指定一个CMD或ENTRYPOINT命令。
+
+* 使用容器作为可执行文件时，应定义ENTRYPOINT。
+
+* CMD应该用作为ENTRYPOINT命令定义默认参数或在容器中执行ad-hoc命令的方法。
+
+* 使用备用参数运行容器时，将覆盖CMD。
+
+
+ENTRYPOINT的最佳用途是设置镜像的主命令，允许该镜像像该命令一样运行（然后使用CMD作为默认标志）。
+    
+让我们从命令行工具s3cmd的镜像示例开始：
+    
+       ENTRYPOINT ["s3cmd"]
+       CMD ["--help"] 
+
+现在可以像这样运行图像来显示命令的帮助：
+
+    $ docker run s3cmd
+
+或使用正确的参数执行命令：
+
+    $ docker run s3cmd ls s3://mybucket
+
+这很有用，因为镜像名称可以兼作二进制文件的引用，如上面的命令所示。
+
+ENTRYPOINT指令也可以与辅助脚本结合使用，使其能够以与上述命令类似的方式运行，即使启动该工具可能需要多个步骤。
+
+例如，Postgres官方镜像使用以下脚本作为其ENTRYPOINT：
+
+    #!/bin/bash
+    set -e
+
+    if [ "$1" = 'postgres' ]; then
+        chown -R postgres "$PGDATA"
+
+        if [ -z "$(ls -A "$PGDATA")" ]; then
+            gosu postgres initdb
+        fi
+
+        exec gosu postgres "$@"
+    fi
+
+    exec "$@"
+
+将app配置为PID 1：此脚本使用exec Bash命令，以便最终运行的应用程序成为容器的PID 1.这允许应用程序接收发送到容器的任何Unix信号。
+
+帮助程序脚本被复制到容器中并通过容器启动时的ENTRYPOINT运行：
+
+    COPY ./docker-entrypoint.sh /
+    ENTRYPOINT ["/docker-entrypoint.sh"]
+    CMD ["postgres"]
+
+该脚本允许用户以多种方式与Postgres交互。
+
+它可以简单地启动Postgres：
+
+    $ docker run postgres
+
+或者，它可用于运行Postgres并将参数传递给服务器：
+
+    $ docker run postgres postgres --help
+
+最后，它还可以用来启动一个完全不同的工具，比如Bash：
+
+    $ docker run --rm -it postgres bash
+
 
 ###### VOLUME
 
