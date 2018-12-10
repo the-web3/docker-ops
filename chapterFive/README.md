@@ -992,12 +992,158 @@ ENTRYPOINT指令也可以与辅助脚本结合使用，使其能够以与上述�
 
 ###### VOLUME
 
+    VOLUME ["/data"]
+
+VOLUME指令创建具有指定名称的安装点，并将其标记为从本机主机或其他容器保存外部安装的卷。 该值可以是JSON数组，VOLUME [“/var/log/”]或具有多个参数的纯字符串，例如VOLUME/var/log或VOLUME/var/log/var/db。
+
+docker run命令使用基础映像中指定位置存在的任何数据初始化新创建的卷。 例如，请考虑以下Dockerfile片段：
+
+    FROM ubuntu
+    RUN mkdir /myvol
+    RUN echo "hello world" > /myvol/greeting
+    VOLUME /myvol
+
+此Dockerfile会生成一个映像，该映像会导致docker run在/ myvol上创建新的挂载点，并将greeting文件复制到新创建的卷中。
+
+VOLUME指令应用于公开由docker容器创建的任何数据库存储区域，配置存储或文件/文件夹。 强烈建议您将VOLUME用于镜像的任何可变和/或用户可维修部分。
+
+有关指定卷的说明
+关于Dockerfile中的卷，请记住以下事项。
+
+* 基于Windows的容器上的卷：使用基于Windows的容器时，容器中卷的目标必须是以下之一：
+** 不存在或空目录
+** C以外的驱动器：
+
+* 从Dockerfile中更改卷：如果任何构建步骤在声明后更改卷内的数据，那么这些更改将被丢弃。
+
+* JSON格式：列表被解析为JSON数组。您必须用双引号（“）而不是单引号（'）括起来。
+
+* 主机目录在容器运行时声明：主机目录（mountpoint）本质上是依赖于主机的。这是为了保持镜像的可移植性，因为不能保证给定的主机目录在所有主机上都可用。因此，您无法从Dockerfile中安装主机目录。 VOLUME指令不支持指定host-dir参数。您必须在创建或运行容器时指定安装点。
 
 
 ###### USER
 
+    USER <user>[:<group>] or
+    USER <UID>[:<GID>]
+
+USER指令设置用户名（或UID）以及可选的用户组（或GID），以便在运行映像时以及Dockerfile中跟随它的任何RUN，CMD和ENTRYPOINT指令时使用。
+
+警告：当用户没有主组时，将使用根组运行映像（或下一条指令）。
+
+在Windows上，如果用户不是内置帐户，则必须先创建用户。 这可以使用作为Dockerfile一部分调用的net user命令来完成。
+
+     FROM microsoft/windowsservercore
+        # Create Windows user in the container
+        RUN net user /add patrick
+        # Set it for subsequent commands
+        USER patrick
+
+如果服务可以在没有权限的情况下运行，请使用USER更改为非root用户。 首先在Dockerfile中创建用户和组，例如RUN groupadd -r postgres && useradd --no-log-init -r -g postgres postgres。
+
+考虑一个显式的UID / GID
+
+镜像中的用户和组被分配了非确定性UID/GID，因为无论镜像重建如何，都会分配“下一个”UID/GID。因此，如果它很重要，您应该分配一个显式的UID/GID。
+
+由于Go存档/tar包处理稀疏文件时未解决的错误，尝试在Docker容器内创建具有非常大的UID的用户可能导致磁盘耗尽，因为容器层中的/var/log/faillog填充了NULL（\0）个字符。解决方法是将--no-log-init标志传递给useradd。 Debian/Ubuntu adduser包装器不支持此标志。
+
+避免安装或使用sudo，因为它具有不可预测的TTY和可能导致问题的信号转发行为。如果您绝对需要类似于sudo的功能，例如将守护程序初始化为root但将其作为非root运行，请考虑使用“gosu”。
+
+最后，为了减少层次和复杂性，请避免频繁地来回切换USER。
+
 ###### WORKDIR
 
+    WORKDIR /path/to/workdir
+
+WORKDIR指令为Dockerfile中的任何RUN，CMD，ENTRYPOINT，COPY和ADD指令设置工作目录。 如果WORKDIR不存在，即使它未在任何后续Dockerfile指令中使用，也将创建它。
+
+WORKDIR指令可以在Dockerfile中多次使用。 如果提供了相对路径，则它将相对于先前WORKDIR指令的路径。 例如：
+
+    WORKDIR /a
+    WORKDIR b
+    WORKDIR c
+    RUN pwd
+
+此Dockerfile中最终pwd命令的输出为/a/b/c。
+
+WORKDIR指令可以解析先前使用ENV设置的环境变量。您只能使用Dockerfile中显式设置的环境变量。例如：
+
+    ENV DIRPATH /path
+    WORKDIR $DIRPATH/$DIRNAME
+    RUN pwd
+
+此Dockerfile中最后一个pwd命令的输出将是/path/$DIRNAME
+
+为了清晰和可靠，您应该始终使用WORKDIR的绝对路径。 此外，你应该使用WORKDIR而不是像RUN cd那样激增指令...... && do-something，这些指令难以阅读，故障排除和维护。
+
+
 ###### ONBUILD
+
+    ONBUILD [INSTRUCTION]
+
+当镜像用作另一个构建的基础时，ONBUILD指令向镜像添加将在稍后执行的触发指令。触发器将在下游构建的上下文中执行，就好像它是在下游Dockerfile中的FROM指令之后立即插入的一样。
+
+任何构建指令都可以注册为触发器。
+
+如果要构建将用作构建其他镜像的基础的镜像（例如，可以使用特定于用户的配置自定义的应用程序构建环境或守护程序），这将非常有用。
+
+例如，如果您的镜像是可重用的Python应用程序构建器，则需要将应用程序源代码添加到特定目录中，并且可能需要在此之后调用构建脚本。您现在不能只调用ADD和RUN，因为您还无法访问应用程序源代码，并且每个应用程序构建都会有所不同。您可以简单地为应用程序开发人员提供一个样板Dockerfile来复制粘贴到他们的应用程序中，但这样做效率低，容易出错且难以更新，因为它与特定于应用程序的代码混合在一起。
+
+解决方案是使用ONBUILD来注册预先指令，以便在下一个构建阶段运行。
+
+以下是它的工作原理：
+
+1.当遇到ONBUILD指令时，构建器会向正在构建的图像的元数据添加触发器。该指令不会影响当前构建。
+
+2.在构建结束时，所有触发器的列表都存储在映像清单中的OnBuild键下。可以使用docker inspect命令检查它们。
+
+3.稍后，可以使用FROM指令将图像用作新构建的基础。作为处理FROM指令的一部分，下游构建器查找ONBUILD触发器，并按照它们注册的顺序执行它们。如果任何触发器失败，则中止FROM指令，这反过来导致构建失败。如果所有触发器都成功，则FROM指令完成，并且构建继续照常进行。
+
+4.执行后，触发器将从最终图像中清除。换句话说，它们不是由“大孩子”构建继承的。
+
+例如，您可以添加以下内容：
+
+    [...]
+    ONBUILD ADD . /app/src
+    ONBUILD RUN /usr/local/bin/python-build --dir /app/src
+    [...]
+
+警告：不允许使用ONBUILD ONBUILD链接ONBUILD指令。
+警告：ONBUILD指令可能不会触发FROM或MAINTAINER指令。
+
+在当前Dockerfile构建完成后执行ONBUILD命令。 ONBUILD在从当前镜像派生的任何子镜像中执行。将ONBUILD命令视为父Dockerfile为子Dockerfile提供的指令。
+
+Docker构建在子Dockerfile中的任何命令之前执行ONBUILD命令。
+
+ONBUILD对于将从给定镜像构建的镜像非常有用。例如，您可以使用ONBUILD作为语言堆栈映像，在Dockerfile中构建使用该语言编写的任意用户软件，如Ruby的ONBUILD变体中所示。
+
+从ONBUILD构建的镜像应该获得一个单独的标记，例如：ruby：1.9-onbuild或ruby：2.0-onbuild。
+
+将ADD或COPY放入ONBUILD时要小心。如果新构建的上下文缺少正在添加的资源，则“onbuild”映像将发生灾难性故障。如上所述，添加单独的标记有助于通过允许Dockerfile作者做出选择来缓解这种情况。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
